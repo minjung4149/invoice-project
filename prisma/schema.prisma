@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  phone       String?  @db.VarChar(20)
+  note        String?  @db.Text
+  isFavorite  Boolean  @default(false)
+  balance     Int      @default(0)
+  createDate  DateTime @default(now())
+  updateDate  DateTime @default(now())
+
+  invoices  Invoice[]
+
+  @@map("Client")
+}
+
+
+model Invoice {
+  id               Int      @id @default(autoincrement()) // 기본 키 (자동 증가)
+  no               Int      @default(1)                      // 인보이스 번호
+  client           Client   @relation(fields: [clientId], references: [id])
+  clientId         Int
+  balance  Int     @default(0)                  // 잔금 (정수)
+  payment          Int      @default(0)                  // 입금된 금액 (정수)
+  createDate       DateTime @default(now())              // 생성일
+  updateDate       DateTime @updatedAt                   // 수정일 (자동 업데이트)
+
+  details         InvoiceDetail[]
+}
+
+
+model InvoiceDetail {
+  id         Int      @id @default(autoincrement())      // 기본 키 (자동 증가)
+  invoice    Invoice  @relation(fields: [invoiceId], references: [id])
+  invoiceId  Int                                       // FK (Foreign Key)
+  name       String   @db.VarChar(255)                 // 품명
+  quantity   Int      @default(1)                      // 수량 (기본값 1)
+  price      Int      @default(0)                      // 단가 (원화 기준 정수)
+}
+
+
