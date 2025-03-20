@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "DATABASE_URL": "@localhost:3306/store"
+    }
+  }
+}
