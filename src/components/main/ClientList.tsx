@@ -4,14 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ClientRegisterModal from "@/components/main/ClientModal";
 import {updateClient, updateFavorite} from '@/utils/api';
-
-interface Client {
-  id: number | null;
-  name: string;
-  phone: string;
-  note?: string;
-  isFavorite: boolean;
-}
+import {Client} from "@/types/common";
 
 interface ClientListProps {
   clients: Client[];

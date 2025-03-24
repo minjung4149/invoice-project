@@ -27,3 +27,22 @@ export interface InvoiceRequest {
   payment: number; // 입금
   details: InvoiceDetail[]; // 상품 목록
 }
+
+// 인보이스 아이템 데이터 타입 정의
+export interface InvoiceItem {
+  name: string;
+  quantity: string;
+  price: string;
+  total: string;
+}
+
+// 인보이스 전체 데이터 타입 정의
+export interface InvoiceData {
+  invoiceNumber: string;
+  year: string;
+  month: string;
+  day: string;
+  items: InvoiceItem[];
+  payment: string;
+  note: string;
+}
