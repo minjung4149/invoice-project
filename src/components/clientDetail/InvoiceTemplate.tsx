@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck, faPrint} from "@fortawesome/free-solid-svg-icons";
 import {InvoiceData} from "@/types/common";
+import {createInvoice} from "@/utils/api";
 
 interface InvoiceTemplateProps {
   invoiceData: InvoiceData;
@@ -32,16 +33,59 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated}: InvoiceTemplatePr
     totalAmount - (parseInt(invoiceData.payment.replace(/,/g, ""), 10) || 0);
 
   // 서버로 데이터 전송
-
   const handleConfirm = async () => {
+    console.log("invoiceData:", invoiceData);
+
     if (!isUpdated) {
       alert("먼저 반영하기 버튼을 눌러주세요.");
       return;
     }
 
+    try {
+      const invoiceNumber = invoiceData.invoiceNumber;
 
-    setIsConfirmed(true);
-    alert("확정 처리되었습니다.");
+      if (!invoiceNumber?.startsWith("INVOICE-")) {
+        alert("올바른 계산서 번호 형식이 아닙니다.");
+        return;
+      }
+
+      const [clientIdStr, invoiceNoStr] = invoiceNumber.replace("INVOICE-", "").split("-");
+      const clientId = Number(clientIdStr);
+      const invoiceNo = Number(invoiceNoStr);
+
+      console.log("clientId:", clientId);
+      console.log("invoiceNo:", invoiceNo);
+
+      if (!clientId || !invoiceNo) {
+        alert("올바른 계산서 번호 형식이 아닙니다.");
+        return;
+      }
+
+      const payment = parseInt(invoiceData.payment.replace(/,/g, ""), 10) || 0;
+
+      const requestData = {
+        no: invoiceNo,
+        clientId,
+        balance,
+        payment,
+        details: invoiceData.items.map((item) => ({
+          name: item.name,
+          quantity: parseInt(item.quantity, 10),
+          price: parseInt(item.price.toString().replace(/,/g, ""), 10),
+        })),
+      };
+
+      console.log("requestData 전송 직전:", JSON.stringify(requestData, null, 2));
+
+      const response = await createInvoice(requestData);
+
+      console.log("서버 응답:", response);
+      setIsConfirmed(true);
+      alert("확정 처리되었습니다.");
+    } catch (error) {
+      alert("서버 요청 중 오류가 발생했습니다.");
+      console.error("에러:", error);
+    }
   };
 
   return (

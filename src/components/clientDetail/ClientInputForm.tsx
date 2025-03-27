@@ -16,6 +16,7 @@ const formatNumber = (value: string) => {
   return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+// 금액 단위 한글 표기 함수
 const convertToKoreanCurrency = (num: number): string => {
   if (num === 0) return "원";
 
@@ -66,17 +67,17 @@ const convertToKoreanCurrency = (num: number): string => {
   return result.replace(/\s+/g, "").trim() + " 원"; // 공백 정리
 };
 
-
 const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInputFormProps) => {
   const today = new Date();
   const currentYear = today.getFullYear().toString();
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, "0");
   const currentDay = today.getDate().toString().padStart(2, "0");
+
   // 확인 여부 상태 (제출 후 true)
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   // 현재 포커스된 `input`의 index 저장
-  const [focusedIndex, setFocusedIndex] = useState<number | null>(null); // 현재 포커스된 `input`의 index 저장
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
   // 과일 선택 모달 표시 여부
   const [showFruitOptions, setShowFruitOptions] = useState(false);
@@ -293,7 +294,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
               placeholder="품명"
               value={item.name}
               className={errors.items[index] && !item.name ? "error-border" : ""}
-              onFocus={() => handleFocus(index)} // 🔹 포커스 감지
+              onFocus={() => handleFocus(index)} // 포커스 감지
               onChange={(e) => handleItemChange(index, "name", e.target.value)}
             />
             <input
