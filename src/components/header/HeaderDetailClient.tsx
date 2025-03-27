@@ -1,15 +1,14 @@
 "use client";
-import {useParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import HeaderDetail from "@/components/header/HeaderDetail";
 
 const HeaderDetailClient = () => {
-  const params = useParams();
+  const searchParams = useSearchParams();
 
-  const clientName = params.name
-    ? decodeURIComponent(Array.isArray(params.name) ? params.name[0] : params.name).replace(/-/g, ' ')
-    : '';
+  const clientName = searchParams.get("name") || "";
+  const clientId = Number(searchParams.get("id") || 0);
 
-  return <HeaderDetail clientName={clientName}/>;
+  return <HeaderDetail clientName={clientName} clientId={clientId}/>;
 };
 
 export default HeaderDetailClient;

@@ -63,7 +63,7 @@ const ClientDetail = () => {
 
   return (
     <>
-      <HeaderDetail clientName={clientName}/>
+      <HeaderDetail clientName={clientName} clientId={clientId}/>
       <main className="site-content">
         <div className="container">
           <div className="main-wrapper">

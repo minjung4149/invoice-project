@@ -8,9 +8,10 @@ import Image from "next/image";
 
 interface HeaderDetailProps {
   clientName: string;
+  clientId: number;
 }
 
-const HeaderDetail = ({clientName}: HeaderDetailProps) => {
+const HeaderDetail = ({clientName, clientId}: HeaderDetailProps) => {
   const pathname = usePathname();
   // 공백을 하이픈(-)으로 변환
   const formattedClientName = clientName.replace(/\s+/g, '-');
@@ -33,8 +34,8 @@ const HeaderDetail = ({clientName}: HeaderDetailProps) => {
               <Link
                 href={
                   isOrderHistoryPage
-                    ? `/client-detail/${formattedClientName}`
-                    : `/client-detail/${formattedClientName}/order-history`
+                    ? `/client-detail?name=${encodeURIComponent(clientName)}&id=${clientId}`
+                    : `/client-detail/order-history?name=${encodeURIComponent(clientName)}&id=${clientId}`
                 }
                 className="default primary"
               >
