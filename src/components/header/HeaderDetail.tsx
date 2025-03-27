@@ -14,7 +14,6 @@ interface HeaderDetailProps {
 const HeaderDetail = ({clientName, clientId}: HeaderDetailProps) => {
   const pathname = usePathname();
   // 공백을 하이픈(-)으로 변환
-  const formattedClientName = clientName.replace(/\s+/g, '-');
   const isOrderHistoryPage = pathname.includes("/order-history");
 
   return (
