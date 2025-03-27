@@ -1,12 +1,11 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import {useState, useEffect} from "react";
+import {useSearchParams} from "next/navigation";
 import HeaderDetail from "@/components/header/HeaderDetail";
 import ClientInputForm from "@/components/clientDetail/ClientInputForm";
 import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
-import { getLatestInvoiceByClientId } from "@/utils/api";
-import { InvoiceData } from "@/types/common";
+import {getLatestInvoiceByClientId} from "@/utils/api";
+import {InvoiceData} from "@/types/common";
 
 // 클라이언트 컴포넌트
 const ClientDetail = () => {
@@ -37,7 +36,7 @@ const ClientDetail = () => {
       const latestInvoice = data?.latestInvoice;
 
       if (!latestInvoice) {
-        setInvoiceData((prev) => ({ ...prev, invoiceNumber: `${clientId}-1` }));
+        setInvoiceData((prev) => ({...prev, invoiceNumber: `${clientId}-1`}));
         return;
       }
 
@@ -50,10 +49,10 @@ const ClientDetail = () => {
           .padStart(match[1].length, "0")}`
         : `${clientId}-1`;
 
-      setInvoiceData((prev) => ({ ...prev, invoiceNumber: nextInvoiceNumber }));
+      setInvoiceData((prev) => ({...prev, invoiceNumber: nextInvoiceNumber}));
     } catch (error) {
       console.error(`Failed to fetch latest invoice for client ${clientId}:`, error);
-      setInvoiceData((prev) => ({ ...prev, invoiceNumber: `${clientId}-1` }));
+      setInvoiceData((prev) => ({...prev, invoiceNumber: `${clientId}-1`}));
     }
   };
 
@@ -64,7 +63,7 @@ const ClientDetail = () => {
 
   return (
     <>
-      <HeaderDetail clientName={clientName} />
+      <HeaderDetail clientName={clientName}/>
       <main className="site-content">
         <div className="container">
           <div className="main-wrapper">
