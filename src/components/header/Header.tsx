@@ -6,7 +6,7 @@ import {faPlus, faWonSign} from "@fortawesome/free-solid-svg-icons";
 import ClientRegisterModal from "@/components/main/ClientModal";
 import {createClient} from '@/utils/api';
 
- interface Client {
+interface Client {
   id: number | null;
   name: string;
   phone: string;
@@ -52,8 +52,8 @@ const Header = ({onClientRegistered}: { onClientRegistered: () => void }) => {
       {isRegisterModalOpen && (
         <ClientRegisterModal
           isOpen={isRegisterModalOpen}
-          onClose={() => setIsRegisterModalOpen(false)}
-          onRegister={handleRegister}
+          onCloseAction={() => setIsRegisterModalOpen(false)}
+          onRegisterAction={handleRegister}
         />
       )}
     </header>

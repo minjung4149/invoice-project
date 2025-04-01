@@ -13,15 +13,15 @@ interface Client {
 
 interface ClientRegisterModalProps {
   isOpen: boolean;
-  onClose: () => void;
-  onRegister: (client: Client) => void;
+  onCloseAction: () => void;
+  onRegisterAction: (client: Client) => void;
   initialData?: Client | null;
 }
 
 export default function ClientRegisterModal({
                                               isOpen,
-                                              onClose,
-                                              onRegister,
+                                              onCloseAction,
+                                              onRegisterAction,
                                               initialData,
                                             }: ClientRegisterModalProps) {
   const [id, setId] = useState<number | null>(null);
@@ -67,15 +67,15 @@ export default function ClientRegisterModal({
       isFavorite,
     };
 
-    onRegister(newClient);
-    onClose();
+    onRegisterAction(newClient);
+    onCloseAction();
   };
 
   return (
     isOpen && (
       <div className="modal-overlay">
         <div className="modal">
-          <button onClick={onClose} className="close-btn">✕</button>
+          <button onClick={onCloseAction} className="close-btn">✕</button>
           <div className="modal-header">
             <h2 className="under-line">{initialData ? "거래처 정보 수정" : "신규 거래처 등록"}</h2>
           </div>

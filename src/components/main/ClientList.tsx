@@ -97,11 +97,11 @@ export default function ClientList({clients}: ClientListProps) {
       {isModalOpen && (
         <ClientRegisterModal
           isOpen={isModalOpen}
-          onClose={() => {
+          onCloseAction={() => {
             setIsModalOpen(false);
             setSelectedClient(null);
           }}
-          onRegister={handleRegisterClient}
+          onRegisterAction={handleRegisterClient}
           initialData={selectedClient}
         />
       )}
