@@ -5,7 +5,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faWonSign} from "@fortawesome/free-solid-svg-icons";
 import ClientRegisterModal from "@/components/main/ClientModal";
 import {createClient} from '@/utils/api';
-import { Client } from "@/types/common";
+
+ interface Client {
+  id: number | null;
+  name: string;
+  phone: string;
+  note?: string;
+  isFavorite: boolean;
+}
 
 const Header = ({onClientRegistered}: { onClientRegistered: () => void }) => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);

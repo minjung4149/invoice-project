@@ -1,18 +1,3 @@
-export interface Client {
-  id: number | null;
-  name: string;
-  phone: string;
-  note?: string;
-  isFavorite: boolean;
-}
-
-export interface ClientRegisterModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onRegister: (client: Client) => void;
-  initialData?: Client | null;
-}
-
 //확정하기 버튼 클릭
 export interface InvoiceDetail {
   name: string; // 상품명

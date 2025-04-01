@@ -4,14 +4,21 @@ import Link from "next/link";
 import Image from "next/image";
 import ClientRegisterModal from "@/components/main/ClientModal";
 import {updateClient, updateFavorite} from '@/utils/api';
-import {Client} from "@/types/common";
+import {refreshClientsAction} from '@/utils/actions';
+
+interface Client {
+  id: number | null;
+  name: string;
+  phone: string;
+  note?: string;
+  isFavorite: boolean;
+}
 
 interface ClientListProps {
   clients: Client[];
-  refreshClients: () => void;
 }
 
-export default function ClientList({clients, refreshClients}: ClientListProps) {
+export default function ClientList({clients}: ClientListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
@@ -31,7 +38,7 @@ export default function ClientList({clients, refreshClients}: ClientListProps) {
   const handleRegisterClient = async (updatedClient: Client) => {
     try {
       await updateClient(updatedClient); // 서버에 업데이트 요청
-      refreshClients(); // 최신 거래처 목록을 다시 불러옴
+      await refreshClientsAction(); // 서버 액션으로 리스트 갱신
       setIsModalOpen(false);
       alert('거래처 정보가 수정되었습니다.');
     } catch (error) {
@@ -39,7 +46,6 @@ export default function ClientList({clients, refreshClients}: ClientListProps) {
       alert('거래처 정보를 수정하는 중 오류가 발생했습니다.');
     }
   };
-
 
   /**
    * 즐겨찾기 버튼 클릭 시 실행되는 함수
@@ -49,7 +55,7 @@ export default function ClientList({clients, refreshClients}: ClientListProps) {
   const toggleFavorite = async (id: number, isFavorite: boolean) => {
     try {
       await updateFavorite({id, isFavorite: !isFavorite}); // 즐겨찾기 상태 변경 요청
-      refreshClients(); // 변경된 데이터를 반영하기 위해 최신 거래처 목록을 다시 불러옴
+      await refreshClientsAction(); // 서버 액션으로 리스트 갱신
     } catch (error) {
       console.error(`즐겨찾기 변경 실패 (거래처 ID: ${id}): 서버 응답 오류 또는 네트워크 문제`, error);
       alert('즐겨찾기 상태를 변경하는 중 오류가 발생했습니다.');

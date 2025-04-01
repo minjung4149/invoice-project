@@ -1,4 +1,12 @@
-import {Client, InvoiceRequest} from "@/types/common";
+import {InvoiceRequest} from "@/types/common";
+
+interface Client {
+  id: number | null;
+  name: string;
+  phone: string;
+  note?: string;
+  isFavorite: boolean;
+}
 
 // 고객 정보 신규 등록 API
 export const login = async () => {

@@ -2,7 +2,21 @@
 import {useState, useEffect} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
-import {Client, ClientRegisterModalProps} from "@/types/common";
+
+interface Client {
+  id: number | null;
+  name: string;
+  phone: string;
+  note?: string;
+  isFavorite: boolean;
+}
+
+interface ClientRegisterModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onRegister: (client: Client) => void;
+  initialData?: Client | null;
+}
 
 export default function ClientRegisterModal({
                                               isOpen,

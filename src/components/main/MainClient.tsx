@@ -3,7 +3,14 @@ import {useState, useEffect} from "react";
 import Header from "@/components/header/Header";
 import ClientList from "@/components/main/ClientList";
 import {getClientList} from '@/utils/api';
-import {Client} from "@/types/common";
+
+interface Client {
+  id: number | null;
+  name: string;
+  phone: string;
+  note?: string;
+  isFavorite: boolean;
+}
 
 const MainClient = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -41,7 +48,7 @@ const MainClient = () => {
           <div className="main-wrapper">
             <section>
               {/*거래처 리스트*/}
-              <ClientList clients={clients} refreshClients={fetchClients}/>
+              <ClientList clients={clients}/>
             </section>
           </div>
         </div>
