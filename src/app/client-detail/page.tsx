@@ -8,7 +8,10 @@ export const dynamic = 'force-dynamic';
 const ClientDetailPage = () => {
   return (
     <>
-      <HeaderDetailClient/>
+      <Suspense fallback={<p>헤더 로딩 중...</p>}>
+        <HeaderDetailClient/>
+      </Suspense>
+
       <Suspense fallback={<p>로딩 중...</p>}>
         <ClientDetail/>
       </Suspense>

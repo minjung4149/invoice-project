@@ -8,7 +8,10 @@ export const dynamic = 'force-dynamic';
 const OrderHistoryPage = () => {
   return (
     <>
-      <HeaderDetailClient/>
+      <Suspense fallback={<div>로딩 중...</div>}>
+        <HeaderDetailClient/>
+      </Suspense>
+
       <Suspense fallback={<div>로딩 중...</div>}>
         <OrderHistoryClient/>
       </Suspense>
