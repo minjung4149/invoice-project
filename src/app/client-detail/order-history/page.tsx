@@ -1,5 +1,4 @@
 'use client';
-
 import {Suspense} from 'react';
 import OrderHistoryClient from "@/components/history/OrderHistoryClient";
 import HeaderDetailClient from "@/components/header/HeaderDetailClient";
