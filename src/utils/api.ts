@@ -140,14 +140,25 @@ export const getClientList = async () => {
 // 거래처 잔금 확인용 api
 export const getClientBalance = async () => {
   try {
-    const response = await fetch('/api/remain');
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      throw new Error("환경변수 NEXT_PUBLIC_BASE_URL이 설정되지 않았습니다.");
+    }
+
+    const response = await fetch(`${baseUrl}/api/remain`, {cache: "no-store"});
+
     if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-    return await response.json();
+
+    const result = await response.json();
+    console.log("API 응답 결과:", result);
+
+    return result.clients;
   } catch (error) {
-    console.error('Failed to fetch latest invoices for all clients:', error);
+    console.error("Failed to fetch latest invoices for all clients:", error);
     throw error;
   }
 };
+
 
 // Invoice API
 // 거래 내역 보기에서 리스트 클릭시 해당 거래 내역을 호출하는 api

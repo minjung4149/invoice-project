@@ -1,15 +1,22 @@
 import React from 'react';
+import {formatDate} from "@/utils/date";
+import {formatPhone} from "@/utils/format";
 
-// 거래처 데이터 (잔금 기준 내림차순 정렬)
-const balanceData = [
-  {id: 1, store: "나이스 마트", contact: "010-1234-5678", date: "2025-02-10 (토)", balance: 500000},
-  {id: 2, store: "굿스토어", contact: "010-2345-6789", date: "2025-02-08 (목)", balance: 300000},
-  {id: 3, store: "행복 슈퍼", contact: "010-3456-7890", date: "2025-02-07 (수)", balance: 0},
-  {id: 4, store: "웰빙 마트", contact: "010-4567-8901", date: "2025-02-06 (화)", balance: 100000},
+interface ClientBalance {
+  clientId: number;
+  name: string;
+  phone: string;
+  balance: number;
+  latestInvoiceDate: string;
+}
 
-].sort((a, b) => b.balance - a.balance); // 잔금 기준 내림차순 정렬
+interface BalanceTableProps {
+  data: ClientBalance[];
+}
 
-const BalanceTable = () => {
+const BalanceTable = ({data}: BalanceTableProps) => {
+  const sorted = [...data].sort((a, b) => b.balance - a.balance);
+
   return (
     <div className="balance-list">
       <div className="table-container">
@@ -25,12 +32,12 @@ const BalanceTable = () => {
           </tr>
           </thead>
           <tbody>
-          {balanceData.map(({id, store, contact, date, balance}) => (
-            <tr key={id}>
-              <td className="id">{id}</td>
-              <td className="date">{date}</td>
-              <td className="store">{store}</td>
-              <td className="contact">{contact}</td>
+          {sorted.map(({clientId, name, phone, latestInvoiceDate, balance}, index) => (
+            <tr key={clientId}>
+              <td className="id">{index + 1}</td>
+              <td className="date">{formatDate(latestInvoiceDate)}</td>
+              <td className="store">{name}</td>
+              <td className="contact">{formatPhone(phone)}</td>
 
               {/* 잔금이 0보다 크면 'balance-positive' 클래스 추가 */}
               <td className={`balance ${balance > 0 ? "balance-positive" : ""}`}>
