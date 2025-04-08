@@ -3,14 +3,13 @@ import React, {useState, useEffect, useRef, useReducer} from "react";
 import {getInvoicesByClientId} from "@/utils/api";
 
 const formatDate = (isoString: string) => {
-  const date = new Date(isoString);
-  const koreaDate = new Date(date.getTime() + 9 * 60 * 60 * 1000); // 한국 시간
+  const date = new Date(isoString); // 이미 한국 시간일 가능성이 높음
 
-  const year = koreaDate.getFullYear();
-  const month = String(koreaDate.getMonth() + 1).padStart(2, "0");
-  const day = String(koreaDate.getDate()).padStart(2, "0");
-  const hour = String(koreaDate.getHours()).padStart(2, "0");
-  const minute = String(koreaDate.getMinutes()).padStart(2, "0");
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
 
   return `${year}-${month}-${day} ${hour}:${minute}`;
 };
@@ -144,7 +143,7 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) =>
           <th>구매 날짜</th>
           <th>합계 금액</th>
           <th>잔금</th>
-          <th>수정하기</th>
+          <th>상세</th>
         </tr>
         </thead>
         <tbody>
@@ -159,7 +158,7 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) =>
             <td className="total">{parseInt(order.total, 10).toLocaleString()}</td>
             <td className="balance">{parseInt(order.balance, 10).toLocaleString()}</td>
             <td>
-              <button className="detail-button">수정 하기</button>
+              <button className="detail-button">{index === 0 ? "수정 하기" : "상세 보기"}</button>
             </td>
           </tr>
         ))}
