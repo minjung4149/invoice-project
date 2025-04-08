@@ -138,7 +138,7 @@ export const getClientList = async () => {
 
 // api/remain 의 api 호출 함수
 // 거래처 잔금 확인용 api
-export const getAllClientsWithLatestInvoice = async () => {
+export const getClientBalance = async () => {
   try {
     const response = await fetch('/api/remain');
     if (!response.ok) throw new Error(`Error: ${response.statusText}`);
@@ -153,7 +153,7 @@ export const getAllClientsWithLatestInvoice = async () => {
 // 거래 내역 보기에서 리스트 클릭시 해당 거래 내역을 호출하는 api
 export const getInvoiceById = async (invoiceId: number) => {
   try {
-    const response = await fetch(`/api/invoices?id=${invoiceId}`);
+    const response = await fetch(`/api/invoice/findById?id=${invoiceId}`);
     if (!response.ok) throw new Error(`Error: ${response.statusText}`);
     return await response.json();
   } catch (error) {

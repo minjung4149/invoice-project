@@ -2,11 +2,24 @@
 import React, {useState, useEffect, useRef, useReducer} from "react";
 import {getInvoicesByClientId} from "@/utils/api";
 
+const formatDate = (isoString: string) => {
+  const date = new Date(isoString);
+  const koreaDate = new Date(date.getTime() + 9 * 60 * 60 * 1000); // 한국 시간
+
+  const year = koreaDate.getFullYear();
+  const month = String(koreaDate.getMonth() + 1).padStart(2, "0");
+  const day = String(koreaDate.getDate()).padStart(2, "0");
+  const hour = String(koreaDate.getHours()).padStart(2, "0");
+  const minute = String(koreaDate.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hour}:${minute}`;
+};
+
 // 주문 데이터 타입 정의
 interface OrderData {
   id: number;
   no: number;
-  date: string;
+  createDate: string;
   total: string;
   balance: string;
 }
@@ -20,10 +33,11 @@ interface State {
 type Action = { type: "LOAD_MORE" };
 
 interface HistoryTableProps {
+  clientId: number;
   onSelectOrder: (order: OrderData) => void;
 }
 
-const HistoryTable: React.FC<HistoryTableProps> = ({onSelectOrder}) => {
+const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) => {
   const itemsPerPage = 10;
 
   // 동적으로 주문 데이터를 관리
@@ -41,6 +55,7 @@ const HistoryTable: React.FC<HistoryTableProps> = ({onSelectOrder}) => {
         };
       default:
         return state;
+
     }
   };
 
@@ -54,16 +69,17 @@ const HistoryTable: React.FC<HistoryTableProps> = ({onSelectOrder}) => {
   const getInvoices = async (id: number) => {
     try {
       const clientInvoice = await getInvoicesByClientId(id);
-      setData((prevData) => [
-        ...prevData,
-        ...clientInvoice.invoices.map((invoice: OrderData) => ({
+
+      console.log('clientInvoice', clientInvoice)
+      setData(
+        clientInvoice.invoices.map((invoice: OrderData) => ({
           id: invoice.id,
           no: invoice.no,
-          date: invoice.date,
+          createDate: invoice.createDate,
           total: invoice.total,
           balance: invoice.balance,
-        })),
-      ]);
+        }))
+      );
     } catch (error) {
       console.error("Failed to fetch invoices:", error);
     }
@@ -71,10 +87,10 @@ const HistoryTable: React.FC<HistoryTableProps> = ({onSelectOrder}) => {
 
   // 최초 실행 시 데이터 가져오기
   useEffect(() => {
-    getInvoices(1);
-  }, []);
+    getInvoices(clientId);
+  }, [clientId]);
 
-  // 🔹 data가 변경될 때 visibleData 업데이트
+  // data가 변경될 때 visibleData 업데이트
   useEffect(() => {
     if (data.length > 0) {
       dispatch({type: "LOAD_MORE"});
@@ -84,9 +100,12 @@ const HistoryTable: React.FC<HistoryTableProps> = ({onSelectOrder}) => {
   // selectedOrder 기본값 설정 (초기 렌더 시 첫 번째 주문 자동 선택)
   useEffect(() => {
     if (data.length > 0 && !selectedOrder) {
-      setSelectedOrder(data[0]);
+      const latest = data[0];
+      setSelectedOrder(latest);
+      onSelectOrder(latest);
     }
-  }, [data, selectedOrder]);
+  }, [data, selectedOrder, onSelectOrder]);
+
 
   // Intersection Observer 설정 (무한 스크롤)
   useEffect(() => {
@@ -125,18 +144,18 @@ const HistoryTable: React.FC<HistoryTableProps> = ({onSelectOrder}) => {
           <th>구매 날짜</th>
           <th>합계 금액</th>
           <th>잔금</th>
-          <th>상세</th>
+          <th>수정하기</th>
         </tr>
         </thead>
         <tbody>
-        {state.visibleData.map((order: OrderData) => ( // `order`의 타입 명시
+        {state.visibleData.map((order: OrderData, index: number) => ( // `order`의 타입 명시
           <tr
-            key={order.no}
-            className={selectedOrder?.no === order.no ? "selected-row" : ""}
+            key={`${order.id}-${order.no}-${index}`}
+            className={selectedOrder?.id === order.id ? "selected-row" : ""}
             onClick={() => handleRowClick(order)}
           >
             <td className="no">{order.no}</td>
-            <td className="date">{order.date}</td>
+            <td className="date">{formatDate(order.createDate)}</td>
             <td className="total">{parseInt(order.total, 10).toLocaleString()}</td>
             <td className="balance">{parseInt(order.balance, 10).toLocaleString()}</td>
             <td>
