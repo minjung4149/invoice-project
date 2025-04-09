@@ -34,20 +34,21 @@ const ClientDetail = () => {
     try {
       const data = await getLatestInvoiceByClientId(clientId);
       const latestInvoice = data?.latestInvoice;
-      const latestInvoiceNumber = latestInvoice?.invoiceNumber || `${clientId}-0`;
-      const match = latestInvoiceNumber.match(/(\d+)$/);
-      const nextInvoiceNumber = match
-        ? `INVOICE-${clientId}-${(parseInt(match[1], 10) + 1).toString().padStart(match[1].length, "0")}`
-        : `INVOICE-${clientId}-1`;
+
+      // no가 숫자로 올 경우 그 값을 사용
+      const latestNo = latestInvoice?.no ?? 0;
+
+      const nextInvoiceNumber = `INVOICE-${clientId}-${latestNo + 1}`;
 
       setInvoiceData((prev) => ({...prev, invoiceNumber: nextInvoiceNumber}));
 
       console.log("생성된 번호:", nextInvoiceNumber);
-
     } catch {
-      setInvoiceData((prev) => ({...prev, invoiceNumber: `${clientId}-1`}));
+      // 실패 시 기본값
+      setInvoiceData((prev) => ({...prev, invoiceNumber: `INVOICE-${clientId}-1`}));
     }
   }, []);
+
 
   const getInvoiceIdRef = useRef(getInvoiceId);
   getInvoiceIdRef.current = getInvoiceId;
@@ -76,7 +77,7 @@ const ClientDetail = () => {
                   invoiceData={invoiceData}
                   clientName={clientName}
                   isUpdated={isUpdated}
-                  onConfirmed={() => getInvoiceIdRef.current(clientId)}
+                  // onConfirmed={() => getInvoiceIdRef.current(clientId)}
                 />
               </div>
             </div>
