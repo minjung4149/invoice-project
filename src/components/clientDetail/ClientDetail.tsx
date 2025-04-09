@@ -77,7 +77,6 @@ const ClientDetail = () => {
                   invoiceData={invoiceData}
                   clientName={clientName}
                   isUpdated={isUpdated}
-                  // onConfirmed={() => getInvoiceIdRef.current(clientId)}
                 />
               </div>
             </div>

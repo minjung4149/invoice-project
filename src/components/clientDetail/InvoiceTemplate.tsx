@@ -21,9 +21,7 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
     return sum + (parseInt(item.total.replace(/,/g, ""), 10) || 0);
   }, 0);
 
-  // 전잔금 (기본값 0, 추후 DB에서 받아올 예정)
   // getLatestInvoiceByClientId() 함수로 최신 Invoice 정보를 가져온다.
-  // Invoice 정보에 balance가 있으면 previousBalance로 설정한다.
   const previousBalance = 0;
 
   // 합계 (소계 + 전잔금)
