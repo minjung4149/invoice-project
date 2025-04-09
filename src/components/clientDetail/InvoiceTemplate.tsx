@@ -9,9 +9,10 @@ interface InvoiceTemplateProps {
   invoiceData: InvoiceData;
   clientName: string;
   isUpdated: boolean;
+  onConfirmed?: () => void;
 }
 
-const InvoiceTemplate = ({invoiceData, clientName, isUpdated}: InvoiceTemplateProps) => {
+const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: InvoiceTemplateProps) => {
   // 확인 여부 상태 (제출 후 true)
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -82,6 +83,7 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated}: InvoiceTemplatePr
       console.log("서버 응답:", response);
       setIsConfirmed(true);
       alert("확정 처리되었습니다.");
+      if (onConfirmed) onConfirmed();
     } catch (error) {
       alert("서버 요청 중 오류가 발생했습니다.");
       console.error("에러:", error);

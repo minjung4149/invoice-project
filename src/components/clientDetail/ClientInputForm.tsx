@@ -83,17 +83,43 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
   const [showFruitOptions, setShowFruitOptions] = useState(false);
 
   // 폼 데이터 상태 (부모 데이터 반영)
+  // const [formData, setFormData] = useState<InvoiceData>({
+  //   invoiceNumber: `INVOICE-${invoiceData.invoiceNumber}`,
+  //   year: currentYear,
+  //   month: currentMonth,
+  //   day: currentDay,
+  //   items: Array.from({length: 5}, () => ({name: "", quantity: "", price: "", total: ""})),
+  //   payment: "",
+  //   note: "",
+  // });
+
+  // `invoiceData.invoiceNumber` 변경 시 formData 반영
+  // useEffect(() => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     invoiceNumber: invoiceData.invoiceNumber,
+  //   }));
+  // }, [invoiceData.invoiceNumber]);
+
+  // ✅ 1. 초기 formData 정의할 때 invoiceNumber에 INVOICE- 중복 방지
   const [formData, setFormData] = useState<InvoiceData>({
-    invoiceNumber: `INVOICE-${invoiceData.invoiceNumber}`,
+    invoiceNumber: invoiceData.invoiceNumber.startsWith("INVOICE-")
+      ? invoiceData.invoiceNumber
+      : `INVOICE-${invoiceData.invoiceNumber}`,
     year: currentYear,
     month: currentMonth,
     day: currentDay,
-    items: Array.from({length: 5}, () => ({name: "", quantity: "", price: "", total: ""})),
+    items: Array.from({length: 5}, () => ({
+      name: "",
+      quantity: "",
+      price: "",
+      total: ""
+    })),
     payment: "",
     note: "",
   });
 
-  // `invoiceData.invoiceNumber` 변경 시 formData 반영
+
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,

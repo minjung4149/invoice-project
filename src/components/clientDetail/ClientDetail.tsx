@@ -1,5 +1,5 @@
 "use client";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback, useRef} from "react";
 import {useSearchParams} from "next/navigation";
 import HeaderDetail from "@/components/header/HeaderDetail";
 import ClientInputForm from "@/components/clientDetail/ClientInputForm";
@@ -30,31 +30,27 @@ const ClientDetail = () => {
   const [isUpdated, setIsUpdated] = useState(false);
 
   // 최신 인보이스 번호를 불러와 자동 생성
-  const getInvoiceId = async (clientId: number) => {
+  const getInvoiceId = useCallback(async (clientId: number) => {
     try {
       const data = await getLatestInvoiceByClientId(clientId);
       const latestInvoice = data?.latestInvoice;
-
-      if (!latestInvoice) {
-        setInvoiceData((prev) => ({...prev, invoiceNumber: `${clientId}-1`}));
-        return;
-      }
-
-      // 기존 invoiceNumber에서 숫자 부분을 추출 후 +1
-      const latestInvoiceNumber = latestInvoice.invoiceNumber || `${clientId}-0`;
+      const latestInvoiceNumber = latestInvoice?.invoiceNumber || `${clientId}-0`;
       const match = latestInvoiceNumber.match(/(\d+)$/);
       const nextInvoiceNumber = match
-        ? `${clientId}-${(parseInt(match[1], 10) + 1)
-          .toString()
-          .padStart(match[1].length, "0")}`
-        : `${clientId}-1`;
+        ? `INVOICE-${clientId}-${(parseInt(match[1], 10) + 1).toString().padStart(match[1].length, "0")}`
+        : `INVOICE-${clientId}-1`;
 
       setInvoiceData((prev) => ({...prev, invoiceNumber: nextInvoiceNumber}));
-    } catch (error) {
-      console.error(`Failed to fetch latest invoice for client ${clientId}:`, error);
+
+      console.log("생성된 번호:", nextInvoiceNumber);
+
+    } catch {
       setInvoiceData((prev) => ({...prev, invoiceNumber: `${clientId}-1`}));
     }
-  };
+  }, []);
+
+  const getInvoiceIdRef = useRef(getInvoiceId);
+  getInvoiceIdRef.current = getInvoiceId;
 
   // clientId 변경될 때 인보이스 정보 업데이트
   useEffect(() => {
@@ -80,6 +76,7 @@ const ClientDetail = () => {
                   invoiceData={invoiceData}
                   clientName={clientName}
                   isUpdated={isUpdated}
+                  onConfirmed={() => getInvoiceIdRef.current(clientId)}
                 />
               </div>
             </div>
