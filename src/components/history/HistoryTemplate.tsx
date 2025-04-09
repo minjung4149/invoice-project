@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {getInvoiceById} from "@/utils/api";
-
+import {useSearchParams} from "next/navigation";
+import {formatDate} from "@/utils/date";
 
 interface OrderData {
   id: number;
@@ -34,6 +35,9 @@ interface HistoryTemplateProps {
 }
 
 const HistoryTemplate: React.FC<HistoryTemplateProps> = ({selectedOrder}) => {
+  const searchParams = useSearchParams(); // URL 파라미터 접근
+  const clientName = searchParams.get("name") || ""; // 클라이언트 이름
+
   const [invoiceDetail, setInvoiceDetail] = useState<InvoiceDetail | null>(null);
 
   // 선택된 주문 ID가 바뀔 때마다 상세 내역 호출
@@ -87,6 +91,46 @@ const HistoryTemplate: React.FC<HistoryTemplateProps> = ({selectedOrder}) => {
 
   return (
     <div className="invoice">
+      {/* 계산서 제목 */}
+      <div className="invoice-title">
+        <h2>計 算 書</h2>
+        <h3>대구중앙청과(주) 지정 중도매인 20번</h3>
+      </div>
+
+      <div className="invoice-header">
+        {/* 좌측: 업체 정보 */}
+        <div className="header-left">
+          <p className="store"><strong>{clientName}</strong> <span>貴下</span></p>
+          <div className="invoice-date">
+            {selectedOrder.createDate && (() => {
+              const [datePart] = formatDate(selectedOrder.createDate).split(" "); // "YYYY-MM-DD"
+              const [year, month, day] = datePart.split("-");
+              return (
+                <>
+                  <p>
+                    西紀 {year}년 {month}월 {day}일
+                  </p>
+                  <p>下記와 如히 計算함</p>
+                </>
+              );
+            })()}
+          </div>
+        </div>
+
+
+        {/* 우측: 판매자 정보 */}
+        <div className="header-right">
+          <p className="spacing"><strong>중앙영농 (주)</strong></p>
+          <p className="spacing">서영민</p>
+          <p>대구광역시 북구 매천로18길 34</p>
+          <p><strong>전화:</strong> (053) 311-4149</p>
+          <p><strong>휴대폰:</strong> 010-8596-4149</p>
+          <p><strong>휴대폰:</strong> 010-3532-4149</p>
+        </div>
+      </div>
+
+      <hr className="divider"/>
+
       {/* 품목 테이블 */}
       <table className="invoice-table">
         <thead>
@@ -150,6 +194,14 @@ const HistoryTemplate: React.FC<HistoryTemplateProps> = ({selectedOrder}) => {
           </p>
         </div>
       )}
+
+      {/* 구분선 */}
+      <hr className="divider"/>
+
+      {/* 푸터 */}
+      <div className="invoice-footer">
+        <p>농협: 317-0003-6690-11 중앙영농(주)</p>
+      </div>
     </div>
   );
 }

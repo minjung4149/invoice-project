@@ -1,9 +1,10 @@
 "use client";
 import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleCheck, faPrint} from "@fortawesome/free-solid-svg-icons";
+import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";
 import {InvoiceData} from "@/types/common";
 import {createInvoice} from "@/utils/api";
+import {useRouter} from "next/navigation";
 
 interface InvoiceTemplateProps {
   invoiceData: InvoiceData;
@@ -13,6 +14,7 @@ interface InvoiceTemplateProps {
 }
 
 const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: InvoiceTemplateProps) => {
+  const router = useRouter();
   // 확인 여부 상태 (제출 후 true)
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -82,6 +84,8 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
       setIsConfirmed(true);
       alert("확정 처리되었습니다.");
       if (onConfirmed) onConfirmed();
+      // 페이지 이동 처리
+      router.push(`/client-detail/order-history?name=${encodeURIComponent(clientName)}&id=${clientId}`);
     } catch (error) {
       alert("서버 요청 중 오류가 발생했습니다.");
       console.error("에러:", error);
@@ -101,39 +105,39 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
           </button>
         </div>
 
-        {/* 계산서 제목 */}
-        <div className="invoice-title">
-          <h2>計 算 書</h2>
-          <h3>대구중앙청과(주) 지정 중도매인 20번</h3>
-        </div>
+        {/*/!* 계산서 제목 *!/*/}
+        {/*<div className="invoice-title">*/}
+        {/*  <h2>計 算 書</h2>*/}
+        {/*  <h3>대구중앙청과(주) 지정 중도매인 20번</h3>*/}
+        {/*</div>*/}
 
-        <div className="invoice-header">
-          {/* 좌측: 업체 정보 */}
-          <div className="header-left">
-            <p className="store"><strong>{clientName}</strong> <span>貴下</span></p>
-            <div className="invoice-date">
-              <p>
-                西紀 {invoiceData.year}년{" "}
-                {invoiceData.month.padStart(2, "0")}월{" "}
-                {invoiceData.day.padStart(2, "0")}일
-              </p>
-              <p>下記와 如히 計算함</p>
-            </div>
-          </div>
+        {/*<div className="invoice-header">*/}
+        {/*  /!* 좌측: 업체 정보 *!/*/}
+        {/*  <div className="header-left">*/}
+        {/*    <p className="store"><strong>{clientName}</strong> <span>貴下</span></p>*/}
+        {/*    <div className="invoice-date">*/}
+        {/*      <p>*/}
+        {/*        西紀 {invoiceData.year}년{" "}*/}
+        {/*        {invoiceData.month.padStart(2, "0")}월{" "}*/}
+        {/*        {invoiceData.day.padStart(2, "0")}일*/}
+        {/*      </p>*/}
+        {/*      <p>下記와 如히 計算함</p>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
 
 
-          {/* 우측: 판매자 정보 */}
-          <div className="header-right">
-            <p className="spacing"><strong>중앙영농 (주)</strong></p>
-            <p className="spacing">서영민</p>
-            <p>대구광역시 북구 매천로18길 34</p>
-            <p><strong>전화:</strong> (053) 311-4149</p>
-            <p><strong>휴대폰:</strong> 010-8596-4149</p>
-            <p><strong>휴대폰:</strong> 010-3532-4149</p>
-          </div>
-        </div>
+        {/*  /!* 우측: 판매자 정보 *!/*/}
+        {/*  <div className="header-right">*/}
+        {/*    <p className="spacing"><strong>중앙영농 (주)</strong></p>*/}
+        {/*    <p className="spacing">서영민</p>*/}
+        {/*    <p>대구광역시 북구 매천로18길 34</p>*/}
+        {/*    <p><strong>전화:</strong> (053) 311-4149</p>*/}
+        {/*    <p><strong>휴대폰:</strong> 010-8596-4149</p>*/}
+        {/*    <p><strong>휴대폰:</strong> 010-3532-4149</p>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
-        <hr className="divider"/>
+        {/*<hr className="divider"/>*/}
 
         {/* 품목 테이블 */}
         <table className="invoice-table">
@@ -203,20 +207,14 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
           </p>
         </div>
 
-        {/* 구분선 */
-        }
-        <hr className="divider"/>
+        {/*/!* 구분선 *!/*/}
+        {/*<hr className="divider"/>*/}
 
-        {/* 푸터 */
-        }
-        <div className="invoice-footer">
-          <p>농협: 317-0003-6690-11 중앙영농(주)</p>
-        </div>
+        {/*/!* 푸터 *!/*/}
+        {/*<div className="invoice-footer">*/}
+        {/*  <p>농협: 317-0003-6690-11 중앙영농(주)</p>*/}
+        {/*</div>*/}
       </div>
-      <button className="print-btn">
-        <FontAwesomeIcon icon={faPrint} className="icon"/>
-        인쇄하기
-      </button>
     </>
   )
 };

@@ -2,16 +2,19 @@
 import React, {useState, useEffect, useRef, useReducer} from "react";
 import {getInvoicesByClientId} from "@/utils/api";
 
-const formatDate = (isoString: string) => {
-  const date = new Date(isoString); // 이미 한국 시간일 가능성이 높음
+// 테이블에서만 사용하는 날짜 포맷터: "2025-04-09(수) 14:19"
+const formatDateWithWeekday = (isoString: string) => {
+  const date = new Date(isoString);
+  const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
+  const weekday = weekdays[date.getDay()];
   const hour = String(date.getHours()).padStart(2, "0");
   const minute = String(date.getMinutes()).padStart(2, "0");
 
-  return `${year}-${month}-${day} ${hour}:${minute}`;
+  return `${year}-${month}-${day}(${weekday}) ${hour}:${minute}`;
 };
 
 // 주문 데이터 타입 정의
@@ -161,11 +164,11 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) =>
             onClick={() => handleRowClick(order)}
           >
             <td className="no">{order.no}</td>
-            <td className="date">{formatDate(order.createDate)}</td>
+            <td className="date">{formatDateWithWeekday(order.createDate)}</td>
             <td className="total">{parseInt(order.total, 10).toLocaleString()}</td>
             <td className="balance">{parseInt(order.balance, 10).toLocaleString()}</td>
             <td>
-              <button className="detail-button print mr-8">인쇄 하기</button>
+              <button className="detail-button print mr-8">인쇄</button>
               {order.id === latestOrderId && (
                 <button className="detail-button edit">수정</button>
               )}

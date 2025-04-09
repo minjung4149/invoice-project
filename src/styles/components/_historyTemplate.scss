@@ -8,30 +8,11 @@
   .invoice {
     width: 50%;
     border: 0;
-    padding: 0 20px;
+    border-left: 1px solid #111;
+    padding: 12px 20px;
     overflow-y: auto;
     height: calc(100vh - 84px);
     position: relative;
-
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 20px;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    &::before {
-      left: 0;
-      background: linear-gradient(to right, rgba(0, 0, 0, 0.05), transparent);
-    }
-
-    &::after {
-      right: 0;
-      background: linear-gradient(to left, rgba(0, 0, 0, 0.05), transparent);
-    }
 
     .invoice-table {
       margin: 0 0 10px 0;
