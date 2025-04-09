@@ -134,6 +134,13 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) =>
     onSelectOrder(order);
   };
 
+  // 최신 주문 ID를 구함
+  const latestOrderId = data.reduce((latestId, current) => {
+    return new Date(current.createDate) > new Date(data.find(d => d.id === latestId)?.createDate ?? '')
+      ? current.id
+      : latestId;
+  }, data[0]?.id);
+
   return (
     <div className="table-container">
       <table className="order-table">
@@ -158,7 +165,10 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) =>
             <td className="total">{parseInt(order.total, 10).toLocaleString()}</td>
             <td className="balance">{parseInt(order.balance, 10).toLocaleString()}</td>
             <td>
-              <button className="detail-button">{index === 0 ? "수정 하기" : "상세 보기"}</button>
+              <button className="detail-button print mr-8">인쇄 하기</button>
+              {order.id === latestOrderId && (
+                <button className="detail-button edit">수정</button>
+              )}
             </td>
           </tr>
         ))}
