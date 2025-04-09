@@ -168,9 +168,9 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) =>
             <td className="total">{parseInt(order.total, 10).toLocaleString()}</td>
             <td className="balance">{parseInt(order.balance, 10).toLocaleString()}</td>
             <td>
-              <button className="detail-button print mr-8">인쇄</button>
+              <button className="detail-button print">인쇄</button>
               {order.id === latestOrderId && (
-                <button className="detail-button edit">수정</button>
+                <button className="detail-button edit ml-8">수정</button>
               )}
             </td>
           </tr>
