@@ -38,7 +38,6 @@ const convertToKoreanCurrency = (num: number): string => {
       if (digit === 1 && unitIndex === 1) {
         word = "십";
       }
-
       chunk = word + chunk;
     }
 
@@ -51,7 +50,6 @@ const convertToKoreanCurrency = (num: number): string => {
       if (chunk !== "") {
         result = chunk + bigUnitText[bigUnitIndex] + " " + result;
       }
-
       chunk = "";
       bigUnitIndex++;
     }
@@ -100,15 +98,27 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
     note: "",
   });
 
-
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
+    setFormData({
       invoiceNumber: invoiceData.invoiceNumber.startsWith("INVOICE-")
         ? invoiceData.invoiceNumber
         : `INVOICE-${invoiceData.invoiceNumber}`,
-    }));
-  }, [invoiceData.invoiceNumber]);
+      year: invoiceData.year || currentYear,
+      month: invoiceData.month || currentMonth,
+      day: invoiceData.day || currentDay,
+      items: invoiceData.items.length > 0
+        ? invoiceData.items
+        : Array.from({length: 5}, () => ({
+          name: "",
+          quantity: "",
+          price: "",
+          total: ""
+        })),
+      payment: invoiceData.payment || "",
+      note: invoiceData.note || "",
+    });
+  }, [invoiceData]);
+
 
   // 입력값 에러 상태
   const [errors, setErrors] = useState<{ items: boolean[]; month: boolean; day: boolean }>({

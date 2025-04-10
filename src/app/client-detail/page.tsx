@@ -1,4 +1,3 @@
-'use client';
 import {Suspense} from "react";
 import ClientDetail from "@/components/clientDetail/ClientDetail";
 import HeaderDetailClient from "@/components/header/HeaderDetailClient";

@@ -1,5 +1,6 @@
 "use client";
 import React, {useState, useEffect, useRef, useReducer} from "react";
+import {useRouter} from "next/navigation";
 import {getInvoicesByClientId} from "@/utils/api";
 
 // 테이블에서만 사용하는 날짜 포맷터: "2025-04-09(수) 14:19"
@@ -36,10 +37,12 @@ type Action = { type: "LOAD_MORE" };
 
 interface HistoryTableProps {
   clientId: number;
+  clientName: string;
   onSelectOrder: (order: OrderData) => void;
 }
 
-const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) => {
+const HistoryTable: React.FC<HistoryTableProps> = ({clientId, clientName, onSelectOrder}) => {
+  const router = useRouter();
   const itemsPerPage = 10;
 
   // 동적으로 주문 데이터를 관리
@@ -170,7 +173,16 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, onSelectOrder}) =>
             <td>
               <button className="detail-button print">인쇄</button>
               {order.id === latestOrderId && (
-                <button className="detail-button edit ml-8">수정</button>
+                <button
+                  className="detail-button edit ml-8"
+                  onClick={() => {
+                    router.push(
+                      `/client-detail/edit-invoice?id=${order.id}&name=${encodeURIComponent(clientName)}&clientId=${clientId}`
+                    );
+                  }}
+                >
+                  수정
+                </button>
               )}
             </td>
           </tr>

@@ -7,6 +7,7 @@ import HistoryTemplate from "@/components/history/HistoryTemplate";
 const OrderHistoryClient = () => {
   const searchParams = useSearchParams();
   const clientId = Number(searchParams.get("id") || 0);
+  const clientName = searchParams.get("name") || "";
 
   const [selectedOrder, setSelectedOrder] = useState({
     id: 0,
@@ -21,7 +22,7 @@ const OrderHistoryClient = () => {
         <div className="main-wrapper">
           <div className="order-history">
             {/* 주문 테이블에서 선택한 주문 데이터를 저장 */}
-            <HistoryTable clientId={clientId} onSelectOrder={setSelectedOrder}/>
+            <HistoryTable clientId={clientId} clientName={clientName} onSelectOrder={setSelectedOrder}/>
             {/* 선택된 주문 정보 전달 */}
             <HistoryTemplate selectedOrder={selectedOrder}/>
           </div>
