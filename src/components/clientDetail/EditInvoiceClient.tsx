@@ -1,7 +1,7 @@
 "use client";
 
 import React, {useEffect, useState, useCallback, useRef} from "react";
-import {useSearchParams, useRouter} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import HeaderDetail from "@/components/header/HeaderDetail";
 import ClientInputForm from "@/components/clientDetail/ClientInputForm";
 import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
@@ -10,7 +10,6 @@ import {InvoiceData, InvoiceItem} from "@/types/common";
 
 const EditInvoiceClient = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const invoiceId = Number(searchParams.get("id"));
   const clientId = Number(searchParams.get("clientId") || 1);
@@ -32,7 +31,11 @@ const EditInvoiceClient = () => {
     try {
       const data = await getInvoiceById(invoiceId);
 
-      const items: InvoiceItem[] = (data.details || []).map((item: any) => ({
+      const items: InvoiceItem[] = (data.details || []).map((item: {
+        name: string;
+        quantity: number;
+        price: number
+      }) => ({
         name: item.name,
         quantity: item.quantity.toString(),
         price: item.price.toString(),

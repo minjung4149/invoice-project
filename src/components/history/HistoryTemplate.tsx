@@ -67,7 +67,7 @@ const HistoryTemplate: React.FC<HistoryTemplateProps> = ({selectedOrder}) => {
         const subtotal = items.reduce((sum, item) => sum + item.total, 0);
         const prevBalance = raw.client?.balance ?? 0;
         const total = subtotal + prevBalance;
-        const payment = 10000; // 하드코딩
+        const payment = 0; // 하드코딩
         const balance = total - payment;
         const note = "하드코딩"; // 하드코딩
 

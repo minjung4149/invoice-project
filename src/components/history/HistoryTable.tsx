@@ -154,7 +154,7 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, clientName, onSele
         <tr>
           <th>No</th>
           <th>구매 날짜</th>
-          <th>합계 금액</th>
+          <th>구매 금액</th>
           <th>잔금</th>
           <th>상세</th>
         </tr>

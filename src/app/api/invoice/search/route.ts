@@ -22,8 +22,11 @@ export async function GET(req: Request) {
         createDate: true,
         balance: true,
         details: {
-          select: {price: true},
-        },
+          select: {price: true, quantity: true}
+        }
+      },
+      orderBy: {
+        createDate: 'desc', // 최신순 정렬
       },
     });
 
@@ -33,7 +36,7 @@ export async function GET(req: Request) {
       no: invoice.no,
       createDate: invoice.createDate,
       balance: invoice.balance,
-      total: invoice.details.reduce((sum, detail) => sum + detail.price, 0),
+      total: invoice.details.reduce((sum, detail) => sum + (detail.quantity * detail.price), 0),
     }));
 
     return NextResponse.json({invoices: formattedInvoices}, {status: 200});
