@@ -5,6 +5,7 @@ import {faAppleWhole, faPlus, faArrowUpRightFromSquare} from "@fortawesome/free-
 import {InvoiceItem, InvoiceData} from "@/types/common";
 import fruitCategories from "@/data/fruitCategories";
 
+// ClientInputForm 컴포넌트에 전달되는 props 타입
 interface ClientInputFormProps {
   invoiceData: InvoiceData;
   setInvoiceData: React.Dispatch<React.SetStateAction<InvoiceData>>;
@@ -16,7 +17,7 @@ const formatNumber = (value: string) => {
   return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-// 금액 단위 한글 표기 함수
+// 숫자를 한글 금액으로 변환하는 함수 (예: 123456 → 십이만삼천사백오십육 원)
 const convertToKoreanCurrency = (num: number): string => {
   if (num === 0) return "원";
 
@@ -33,11 +34,7 @@ const convertToKoreanCurrency = (num: number): string => {
     const digit = num % 10;
     if (digit !== 0) {
       let word = numberText[digit] + unitText[unitIndex];
-
-      // '일십' → '십' 처리 (단, 만/억/조 단위에서는 '일' 유지)
-      if (digit === 1 && unitIndex === 1) {
-        word = "십";
-      }
+      if (digit === 1 && unitIndex === 1) word = "십";
       chunk = word + chunk;
     }
 
@@ -45,8 +42,6 @@ const convertToKoreanCurrency = (num: number): string => {
 
     if (unitIndex > 3) {
       unitIndex = 0;
-
-      // 현재 자리수(천 이하)가 비어있지 않다면, 큰 단위(만, 억 등) 추가
       if (chunk !== "") {
         result = chunk + bigUnitText[bigUnitIndex] + " " + result;
       }
@@ -57,14 +52,22 @@ const convertToKoreanCurrency = (num: number): string => {
     num = Math.floor(num / 10);
   }
 
-  // 남아 있는 chunk 처리 (예: "오백만")
   if (chunk !== "") {
     result = chunk + bigUnitText[bigUnitIndex] + " " + result;
   }
 
-  return result.replace(/\s+/g, "").trim() + " 원"; // 공백 정리
+  return result.replace(/\s+/g, "").trim() + " 원";
 };
 
+/**
+ * ClientInputForm 컴포넌트
+ *
+ * 사용자가 인보이스 항목을 직접 입력할 수 있는 입력 폼 UI를 제공하는 컴포넌트
+ * - 날짜, 품목 리스트, 입금액, 비고 등 다양한 항목을 입력 가능
+ * - 품목 항목은 동적으로 추가 및 삭제할 수 있으며, 과일 자동 입력 기능 제공
+ * - 입력값은 유효성 검사를 거쳐 상위 컴포넌트로 전달됨 (setInvoiceData, setIsUpdated 활용)
+ * - 입력값에 따라 금액 합계와 한글 변환 결과도 실시간으로 표시
+ */
 const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInputFormProps) => {
   const today = new Date();
   const currentYear = today.getFullYear().toString();
@@ -80,7 +83,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
   // 과일 선택 모달 표시 여부
   const [showFruitOptions, setShowFruitOptions] = useState(false);
 
-  // 초기 formData 정의할 때 invoiceNumber에 INVOICE- 중복 방지
+  // 입력 폼 상태 초기화
   const [formData, setFormData] = useState<InvoiceData>({
     invoiceNumber: invoiceData.invoiceNumber.startsWith("INVOICE-")
       ? invoiceData.invoiceNumber
@@ -98,6 +101,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
     note: "",
   });
 
+  // 외부 상태(invoiceData) 반영
   useEffect(() => {
     setFormData({
       invoiceNumber: invoiceData.invoiceNumber.startsWith("INVOICE-")
@@ -119,8 +123,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
     });
   }, [invoiceData]);
 
-
-  // 입력값 에러 상태
+  // 입력값 검증 상태
   const [errors, setErrors] = useState<{ items: boolean[]; month: boolean; day: boolean }>({
     items: new Array(5).fill(false),
     month: false,
