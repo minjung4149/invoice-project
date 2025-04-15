@@ -92,6 +92,7 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
       // 주문 내역 페이지로 이동
       router.push(`/client-detail/order-history?name=${encodeURIComponent(clientName)}&id=${clientId}`);
     } catch (error) {
+      console.error("인보이스 확정 중 오류:", error);
       alert("서버 요청 중 오류가 발생했습니다.");
     }
   };
