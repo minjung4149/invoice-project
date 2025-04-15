@@ -28,6 +28,7 @@ const BalancePage = async () => {
       0
     );
   } catch (error) {
+    console.error("잔금 데이터 불러오기 실패:", error);
     // API 호출 실패 시: 빈 배열과 0으로 초기화
     balanceData = [];
     totalBalance = 0;
