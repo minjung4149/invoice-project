@@ -4,6 +4,13 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHouse} from "@fortawesome/free-solid-svg-icons";
 
 
+/**
+ * HeaderHome 컴포넌트
+ *
+ * 거래처 잔금 현황 페이지 상단에 표시되는 헤더 UI
+ * - 제목: "거래처 잔금 현황"
+ * - "홈으로" 이동 버튼 제공
+ */
 const HeaderHome = () => {
   return (
     <header>

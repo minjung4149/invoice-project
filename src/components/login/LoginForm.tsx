@@ -6,6 +6,13 @@ import {login} from "@/utils/api";
 const fixedUserId = "user20"; // 고정 아이디
 const fixedPassword = "2020"; // 고정 비밀번호
 
+/**
+ * LoginForm 컴포넌트
+ *
+ * - 고정된 아이디와 입력 비밀번호를 비교하여 로그인 처리
+ * - 로그인 성공 시 /main 경로로 이동
+ * - 실패 시 에러 메시지 출력
+ */
 const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

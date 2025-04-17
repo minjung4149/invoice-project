@@ -6,6 +6,7 @@ import {faPlus, faWonSign} from "@fortawesome/free-solid-svg-icons";
 import ClientRegisterModal from "@/components/main/ClientModal";
 import {createClient} from '@/utils/api';
 
+// 거래처 신규 작성 타입 정의
 interface Client {
   id: number | null;
   name: string;
@@ -14,12 +15,20 @@ interface Client {
   isFavorite: boolean;
 }
 
+/**
+ * Header 컴포넌트
+ *
+ * - 메인 페이지 상단에 고정되는 헤더 UI
+ * - 거래처 등록 모달 오픈 및 처리 기능 포함
+ * - "신규 거래처 등록" 및 "거래처 잔금 확인" 버튼 제공
+ */
 const Header = ({onClientRegistered}: { onClientRegistered: () => void }) => {
+  // 거래처 등록 모달의 열림/닫힘 상태
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   const handleRegister = useCallback(async (client: Client) => {
     try {
-      await createClient(client);
+      await createClient(client); // 서버에 거래처 생성 요청
       setIsRegisterModalOpen(false); // 모달 닫기
       onClientRegistered(); // 거래처 등록 후 리스트 업데이트
     } catch (error) {

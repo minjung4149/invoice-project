@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 
+// 거래처 타입 정의
 interface Client {
   id: number | null;
   name: string;
@@ -11,19 +12,27 @@ interface Client {
   isFavorite: boolean;
 }
 
+// 모달 컴포넌트 Props 정의
 interface ClientRegisterModalProps {
-  isOpen: boolean;
-  onCloseAction: () => void;
-  onRegisterAction: (client: Client) => void;
-  initialData?: Client | null;
+  isOpen: boolean; // 모달 열림 여부
+  onCloseAction: () => void; // 모달 닫기 콜백
+  onRegisterAction: (client: Client) => void; // 등록/수정 완료 시 호출되는 콜백
+  initialData?: Client | null; // 수정 시 기존 거래처 정보
 }
 
-export default function ClientRegisterModal({
-                                              isOpen,
-                                              onCloseAction,
-                                              onRegisterAction,
-                                              initialData,
-                                            }: ClientRegisterModalProps) {
+/**
+ * ClientRegisterModal 컴포넌트
+ *
+ * 거래처를 새로 등록하거나 기존 거래처 정보를 수정하는 폼 모달
+ * - name은 필수 입력 필드
+ * - 초기값 존재 시 '수정', 없으면 '등록' 모드로 동작
+ */
+const ClientRegisterModal = ({
+                               isOpen,
+                               onCloseAction,
+                               onRegisterAction,
+                               initialData,
+                             }: ClientRegisterModalProps) => {
   const [id, setId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -52,6 +61,7 @@ export default function ClientRegisterModal({
     setErrors({name: false});
   }, [initialData, isOpen]);
 
+  //필수값 검증 후 onRegisterAction 콜백 실행
   const handleSubmit = () => {
     if (name.trim() === "") {
       alert("거래처 명은 필수 입력 사항입니다.");
@@ -126,3 +136,5 @@ export default function ClientRegisterModal({
     )
   );
 }
+
+export default ClientRegisterModal;

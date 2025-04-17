@@ -16,8 +16,10 @@ interface InvoiceTemplateProps {
 /**
  * InvoiceTemplate 컴포넌트
  *
- * 사용자가 입력한 인보이스 데이터를 기반으로
- * 미리보기 테이블을 출력하고, '확정하기' 버튼을 통해 서버에 최종 제출하는 역할
+ * 사용자가 입력한 인보이스 데이터를 기반으로 미리보기 테이블을 렌더링하고,
+ * '확정하기' 버튼을 통해 최종 데이터를 서버에 제출하는 역할을 수행함.
+ * - 소계/입금액/잔금 등의 요약 정보도 함께 계산하여 표시
+ * - 확정 버튼 클릭 시 입력값 유효성 검증 후 서버에 전송
  */
 const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: InvoiceTemplateProps) => {
   const router = useRouter();

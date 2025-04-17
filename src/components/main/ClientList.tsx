@@ -5,6 +5,7 @@ import Image from "next/image";
 import ClientRegisterModal from "@/components/main/ClientModal";
 import {updateClient, updateFavorite} from '@/utils/api';
 
+// 거래처 타입 정의
 interface Client {
   id: number | null;
   name: string;
@@ -13,12 +14,19 @@ interface Client {
   isFavorite: boolean;
 }
 
+// 컴포넌트 props
 interface ClientListProps {
-  clients: Client[];
-  onRefresh: () => Promise<void>;
+  clients: Client[]; // 렌더링할 거래처 리스트
+  onRefresh: () => Promise<void>; // 거래처 갱신 콜백
 }
 
-export default function ClientList({clients, onRefresh}: ClientListProps) {
+/**
+ * ClientList 컴포넌트
+ *
+ * - 전체 거래처 리스트를 출력하고
+ * - 수정/즐겨찾기 기능을 제공하는 클라이언트 전용 컴포넌트
+ */
+const ClientList = ({clients, onRefresh}: ClientListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
@@ -32,7 +40,7 @@ export default function ClientList({clients, onRefresh}: ClientListProps) {
   const handleRegisterClient = async (updatedClient: Client) => {
     try {
       await updateClient(updatedClient);
-      await onRefresh(); // 🔥 클라이언트 상태 갱신
+      await onRefresh(); // 클라이언트 상태 갱신
       setIsModalOpen(false);
       alert('거래처 정보가 수정되었습니다.');
     } catch (error) {
@@ -45,7 +53,7 @@ export default function ClientList({clients, onRefresh}: ClientListProps) {
   const toggleFavorite = async (id: number, isFavorite: boolean) => {
     try {
       await updateFavorite({id, isFavorite: !isFavorite});
-      await onRefresh(); // 🔥 클라이언트 상태 갱신
+      await onRefresh(); // 클라이언트 상태 갱신
     } catch (error) {
       console.error(`즐겨찾기 변경 실패 (거래처 ID: ${id})`, error);
       alert('즐겨찾기 상태를 변경하는 중 오류가 발생했습니다.');
@@ -73,7 +81,13 @@ export default function ClientList({clients, onRefresh}: ClientListProps) {
               </button>
             </div>
             <div className="client-info">
-              <Link href={`/client-detail?name=${encodeURIComponent(client.name)}&id=${client.id}`} passHref>
+              {/*<Link href={`/client-detail?name=${encodeURIComponent(client.name)}&id=${client.id}`} passHref>*/}
+              {/*  <h3>{client.name}</h3>*/}
+              {/*</Link>*/}
+              <Link
+                href={`/client-detail?name=${encodeURIComponent(client.name)}&clientId=${client.id}`}
+                passHref
+              >
                 <h3>{client.name}</h3>
               </Link>
             </div>
@@ -95,3 +109,4 @@ export default function ClientList({clients, onRefresh}: ClientListProps) {
     </div>
   );
 }
+export default ClientList;

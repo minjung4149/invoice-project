@@ -4,6 +4,7 @@ import Header from "@/components/header/Header";
 import ClientList from "@/components/main/ClientList";
 import {getClientList} from '@/utils/api';
 
+// 거래처 타입 정의
 interface Client {
   id: number | null;
   name: string;
@@ -12,6 +13,14 @@ interface Client {
   isFavorite: boolean;
 }
 
+/**
+ * MainClient 컴포넌트
+ *
+ * 거래처 메인 페이지
+ * - 거래처 목록을 서버에서 불러와 출력
+ * - 상단에 Header (거래처 등록 버튼 포함)
+ * - 하단에 ClientList 컴포넌트로 리스트 렌더링
+ */
 const MainClient = () => {
   const [clients, setClients] = useState<Client[]>([]);
 
@@ -42,7 +51,7 @@ const MainClient = () => {
         <div className="container">
           <div className="main-wrapper">
             <section>
-              <ClientList clients={clients} onRefresh={fetchClients} />
+              <ClientList clients={clients} onRefresh={fetchClients}/>
             </section>
           </div>
         </div>

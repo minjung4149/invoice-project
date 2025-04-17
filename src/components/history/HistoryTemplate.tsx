@@ -34,7 +34,13 @@ interface HistoryTemplateProps {
   selectedOrder: OrderData; // 선택된 주문 데이터
 }
 
-const HistoryTemplate: React.FC<HistoryTemplateProps> = ({selectedOrder}) => {
+/**
+ * HistoryTemplate 컴포넌트
+ *
+ * - 선택된 주문의 상세 인보이스 데이터를 불러와 출력
+ * - 품목 테이블 + 요약 정보(소계, 전잔금, 입금, 잔금, 비고) 제공
+ */
+const HistoryTemplate = ({selectedOrder}: HistoryTemplateProps) => {
   const searchParams = useSearchParams(); // URL 파라미터 접근
   const clientName = searchParams.get("name") || ""; // 클라이언트 이름
 
@@ -48,7 +54,7 @@ const HistoryTemplate: React.FC<HistoryTemplateProps> = ({selectedOrder}) => {
       try {
         const raw = await getInvoiceById(selectedOrder.id);
 
-        // 하드코딩 + 프론트 가공
+        // 서버에서 받은 상세 품목 데이터를 프론트에서 직접 가공
         const items: Item[] = (raw.details as Array<{
           name: string;
           quantity: number;
@@ -65,11 +71,11 @@ const HistoryTemplate: React.FC<HistoryTemplateProps> = ({selectedOrder}) => {
         });
 
         const subtotal = items.reduce((sum, item) => sum + item.total, 0);
-        const prevBalance = raw.client?.balance ?? 0;
+        const prevBalance = raw.client?.balance ?? 0; // 서버에서 값으로 교체 예정
         const total = subtotal + prevBalance;
-        const payment = 0; // 하드코딩
+        const payment = 0; // 서버에서 값으로 교체 예정
         const balance = total - payment;
-        const note = "하드코딩"; // 하드코딩
+        const note = ""; // 서버에서 값으로 교체 예정
 
         setInvoiceDetail({
           items,

@@ -20,7 +20,7 @@ const EditInvoiceClient = () => {
   const searchParams = useSearchParams();
 
   // URL 파라미터에서 ID, 거래처 정보 추출
-  const invoiceId = Number(searchParams.get("id"));
+  const invoiceId = Number(searchParams.get("invoiceId") || 1);
   const clientId = Number(searchParams.get("clientId") || 1);
   const clientName = searchParams.get("name") || "Unknown Client";
 

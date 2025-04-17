@@ -19,7 +19,7 @@ const ClientDetail = () => {
   const searchParams = useSearchParams();
 
   // URL 파라미터에서 clientId, clientName 추출 (기본값 설정)
-  const clientId = Number(searchParams.get("id")) || 1;
+  const clientId = Number(searchParams.get("clientId")) || 1;
   const clientName = searchParams.get("name") || "Unknown Client";
 
   // 인보이스 입력 데이터를 상태로 관리

@@ -38,17 +38,25 @@ type Action = { type: "LOAD_MORE" };
 interface HistoryTableProps {
   clientId: number;
   clientName: string;
-  onSelectOrder: (order: OrderData) => void;
+  onSelectOrder: (order: OrderData) => void; // 주문 선택 시 부모로 전달되는 콜백
 }
 
-const HistoryTable: React.FC<HistoryTableProps> = ({clientId, clientName, onSelectOrder}) => {
+/**
+ * HistoryTable 컴포넌트
+ *
+ * - 특정 거래처의 주문 내역 리스트를 테이블 형태로 출력
+ * - 최신 주문 자동 선택
+ * - 무한 스크롤로 점진적 데이터 로딩
+ * - 주문 수정 버튼은 최신 주문에만 노출
+ */
+const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) => {
   const router = useRouter();
   const itemsPerPage = 10;
 
   // 동적으로 주문 데이터를 관리
-  const [data, setData] = useState<OrderData[]>([]);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-  const [selectedOrder, setSelectedOrder] = useState<OrderData | null>(null);
+  const [data, setData] = useState<OrderData[]>([]); // 전체 주문 데이터
+  const observerRef = useRef<HTMLDivElement | null>(null); // 인터섹션 감지를 위한 ref
+  const [selectedOrder, setSelectedOrder] = useState<OrderData | null>(null); // 현재 선택된 주문
 
   // useReducer로 visibleData & loadedItems 상태 관리
   const reducer = (state: State, action: Action): State => {
@@ -173,11 +181,21 @@ const HistoryTable: React.FC<HistoryTableProps> = ({clientId, clientName, onSele
             <td>
               <button className="detail-button print">인쇄</button>
               {order.id === latestOrderId && (
+                // <button
+                //   className="detail-button edit ml-8"
+                //   onClick={() => {
+                //     router.push(
+                //       `/client-detail/edit-invoice?id=${order.id}&name=${encodeURIComponent(clientName)}&clientId=${clientId}`
+                //     );
+                //   }}
+                // >
+                //   수정
+                // </button>
                 <button
                   className="detail-button edit ml-8"
                   onClick={() => {
                     router.push(
-                      `/client-detail/edit-invoice?id=${order.id}&name=${encodeURIComponent(clientName)}&clientId=${clientId}`
+                      `/client-detail/edit-invoice?invoiceId=${order.id}&clientId=${clientId}&name=${encodeURIComponent(clientName)}`
                     );
                   }}
                 >
