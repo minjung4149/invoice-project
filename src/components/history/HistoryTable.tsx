@@ -181,16 +181,6 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
             <td>
               <button className="detail-button print">인쇄</button>
               {order.id === latestOrderId && (
-                // <button
-                //   className="detail-button edit ml-8"
-                //   onClick={() => {
-                //     router.push(
-                //       `/client-detail/edit-invoice?id=${order.id}&name=${encodeURIComponent(clientName)}&clientId=${clientId}`
-                //     );
-                //   }}
-                // >
-                //   수정
-                // </button>
                 <button
                   className="detail-button edit ml-8"
                   onClick={() => {

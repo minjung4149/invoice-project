@@ -81,9 +81,6 @@ const ClientList = ({clients, onRefresh}: ClientListProps) => {
               </button>
             </div>
             <div className="client-info">
-              {/*<Link href={`/client-detail?name=${encodeURIComponent(client.name)}&id=${client.id}`} passHref>*/}
-              {/*  <h3>{client.name}</h3>*/}
-              {/*</Link>*/}
               <Link
                 href={`/client-detail?name=${encodeURIComponent(client.name)}&clientId=${client.id}`}
                 passHref

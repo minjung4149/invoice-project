@@ -38,17 +38,6 @@ const HeaderDetail = ({clientName, clientId}: HeaderDetailProps) => {
               홈으로
             </Link>
             {clientName && (
-              // <Link
-              //   href={
-              //     isOrderHistoryPage
-              //       ? `/client-detail?name=${encodeURIComponent(clientName)}&id=${clientId}`
-              //       : `/client-detail/order-history?name=${encodeURIComponent(clientName)}&id=${clientId}`
-              //   }
-              //   className="default primary"
-              // >
-              //   <FontAwesomeIcon icon={isOrderHistoryPage ? faPen : faBars} className="icon"/>
-              //   {isOrderHistoryPage ? "계산서 작성" : "거래 내역 보기"}
-              // </Link>
               <Link
                 href={
                   isOrderHistoryPage
