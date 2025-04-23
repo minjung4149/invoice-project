@@ -1,7 +1,6 @@
 import {NextResponse} from 'next/server';
-import {PrismaClient} from '@prisma/client';
-
-const prisma = new PrismaClient();
+import {prisma} from '@/lib/prisma';
+import {Prisma as PrismaUtils} from '@prisma/client';
 
 // GET 요청 - 특정 Client의 Invoice 리스트 조회 (InvoiceDetail 가격 합계 포함)
 export async function GET(req: Request) {
@@ -13,31 +12,48 @@ export async function GET(req: Request) {
       return NextResponse.json({error: 'clientId는 필수입니다.'}, {status: 400});
     }
 
-    // 특정 Client의 Invoice 리스트 조회
-    const invoices = await prisma.invoice.findMany({
-      where: {clientId: Number(clientId)},
-      select: {
-        id: true,
-        no: true,
-        createDate: true,
-        balance: true,
-        details: {
-          select: {price: true, quantity: true}
-        }
-      },
-      orderBy: {
-        createDate: 'desc', // 최신순 정렬
-      },
-    });
+    const clientIdNum = Number(clientId);
 
-    // InvoiceDetail의 가격(price) 합계를 계산하여 새로운 배열 생성
-    const formattedInvoices = invoices.map(invoice => ({
-      id: invoice.id,
-      no: invoice.no,
-      createDate: invoice.createDate,
-      balance: invoice.balance,
-      total: invoice.details.reduce((sum, detail) => sum + (detail.quantity * detail.price), 0),
-    }));
+    // LAG()를 사용해 previousBalance 포함한 Invoice 데이터 조회
+    const invoices: {
+      id: number;
+      no: number;
+      createDate: Date;
+      balance: number;
+      previousBalance: number | null;
+    }[] = await prisma.$queryRaw`
+        SELECT i.id,
+               i.no,
+               i."createDate",
+               i.balance,
+               LAG(i.balance) OVER (PARTITION BY i."clientId" ORDER BY i."createDate") AS "previousBalance"
+        FROM "Invoice" i
+        WHERE i."clientId" = ${clientIdNum}
+        ORDER BY i."createDate" DESC
+    `;
+
+    // InvoiceDetail 합계 가져오기 (별도 쿼리 → 성능 좋게 하기 위해)
+    const totals: { invoiceId: number; total: number }[] = await prisma.$queryRaw`
+        SELECT "invoiceId",
+               SUM(quantity * price) AS total
+        FROM "InvoiceDetail"
+        WHERE "invoiceId" IN (${PrismaUtils.join(invoices.map(inv => inv.id))})
+        GROUP BY "invoiceId"
+    `;
+
+    // total 정보와 merge
+    const formattedInvoices = invoices.map((invoice) => {
+      const totalRaw = totals.find(t => t.invoiceId === invoice.id)?.total ?? 0;
+      const total = typeof totalRaw === 'bigint' ? Number(totalRaw) : totalRaw;
+      return {
+        id: invoice.id,
+        no: invoice.no,
+        createDate: invoice.createDate,
+        balance: invoice.balance,
+        previousBalance: invoice.previousBalance ?? 0,
+        total,
+      };
+    });
 
     return NextResponse.json({invoices: formattedInvoices}, {status: 200});
   } catch (error) {
