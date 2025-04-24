@@ -127,7 +127,7 @@ img {
     padding: 0;
     width: 100%;
     height: auto;
-    font-size: 11px;
+    font-size: 12px;
     background: white;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -146,12 +146,12 @@ img {
   table {
     width: 100% !important;
     border-collapse: collapse !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
   }
 
   table th,
   table td {
-    font-size: 11px !important;
+    font-size: 12px !important;
     padding: 4px 5px !important;
     text-align: center !important;
     word-break: break-word !important;
@@ -167,11 +167,11 @@ img {
 
   .print-half {
     flex: none !important;
-    width: 108mm !important;
-    max-width: 108mm !important;
-    padding: 2mm !important;
+    width: 109mm !important;
+    max-width: 109mm !important;
+    padding: 1mm !important;
     box-sizing: border-box !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     line-height: 1.1 !important;
     overflow: hidden !important;
     page-break-inside: avoid !important;
@@ -194,7 +194,17 @@ img {
   }
 
   .invoice .invoice-summary p {
-    font-size: 11px !important;
+    font-size: 12px !important;
+  }
+  .invoice-header p {
+    font-size: 12px !important;
+  }
+  .invoice-header .header-right strong {
+    font-size: 12px !important;
+  }
+
+  .invoice-header strong {
+    font-size: 15px !important;
   }
 }
 
