@@ -219,3 +219,25 @@ export const createInvoice = async (invoiceData: InvoiceRequest) => {
     throw error;
   }
 };
+
+
+export const updateInvoice = async (invoiceData: InvoiceRequest & { id: number }) => {
+  try {
+    const response = await fetch('/api/invoice/update', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(invoiceData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to update invoice:', error);
+    throw error;
+  }
+};
