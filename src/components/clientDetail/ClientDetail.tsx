@@ -3,7 +3,7 @@ import {useState, useEffect, useCallback, useRef} from "react";
 import {useSearchParams} from "next/navigation";
 import ClientInputForm from "@/components/clientDetail/ClientInputForm";
 import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
-import {getLatestInvoiceByClientId} from "@/utils/api";
+import {getLatestInvoiceByClientId, getInvoiceById} from "@/utils/api";
 import {InvoiceData} from "@/types/common";
 
 /**
@@ -36,17 +36,22 @@ const ClientDetail = () => {
   // 입력 내용이 수정되었는지 여부
   const [isUpdated, setIsUpdated] = useState(false);
 
+  // 이전 잔금 상태 추가
+  const [previousBalance, setPreviousBalance] = useState<number>(0);
+
   // 최신 인보이스 번호를 조회하여 자동으로 생성
   const getInvoiceId = useCallback(async (clientId: number) => {
     try {
       const data = await getLatestInvoiceByClientId(clientId);
       const latestInvoice = data?.latestInvoice;
+      const latestBalance = latestInvoice?.balance ?? 0;
       const latestNo = latestInvoice?.no ?? 0;
 
       // 새로운 인보이스 번호 생성: INVOICE-{clientId}-{latestNo+1}
       const nextInvoiceNumber = `INVOICE-${clientId}-${latestNo + 1}`;
 
       setInvoiceData((prev) => ({...prev, invoiceNumber: nextInvoiceNumber}));
+      setPreviousBalance(latestBalance);
     } catch {
       // 조회 실패 시 기본 인보이스 번호로 설정
       setInvoiceData((prev) => ({...prev, invoiceNumber: `INVOICE-${clientId}-1`}));
@@ -80,6 +85,7 @@ const ClientDetail = () => {
                 invoiceData={invoiceData}
                 clientName={clientName}
                 isUpdated={isUpdated}
+                previousBalance={previousBalance}
               />
             </div>
           </div>

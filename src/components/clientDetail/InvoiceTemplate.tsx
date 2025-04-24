@@ -10,7 +10,9 @@ interface InvoiceTemplateProps {
   invoiceData: InvoiceData; // 입력된 인보이스 정보
   clientName: string; // 거래처 이름
   isUpdated: boolean; // 반영 완료 여부
+  previousBalance: number;
   onConfirmed?: () => void; // 확정 후 호출되는 콜백
+  isEditMode?: boolean;
 }
 
 /**
@@ -21,7 +23,7 @@ interface InvoiceTemplateProps {
  * - 소계/입금액/잔금 등의 요약 정보도 함께 계산하여 표시
  * - 확정 버튼 클릭 시 입력값 유효성 검증 후 서버에 전송
  */
-const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: InvoiceTemplateProps) => {
+const InvoiceTemplate = ({invoiceData, clientName, isUpdated, previousBalance, onConfirmed, isEditMode}: InvoiceTemplateProps) => {
   const router = useRouter();
   // 확인 여부 상태 (제출 후 true)
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -30,9 +32,6 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
   const subtotal = invoiceData.items.reduce((sum, item) => {
     return sum + (parseInt(item.total.replace(/,/g, ""), 10) || 0);
   }, 0);
-
-  // 이전 잔금 (기본값 0)
-  const previousBalance = 0;
 
   // 총합 = 소계 + 이전 잔금
   const totalAmount = subtotal + previousBalance;
@@ -43,7 +42,6 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
 
   // 서버로 데이터 전송
   const handleConfirm = async () => {
-    console.log("invoiceData:", invoiceData);
 
     if (!isUpdated) {
       alert("먼저 반영하기 버튼을 눌러주세요.");
@@ -76,6 +74,7 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
         clientId,
         balance,
         payment,
+        note: invoiceData.note,
         details: invoiceData.items.map((item) => ({
           name: item.name,
           quantity: parseInt(item.quantity, 10),
@@ -107,7 +106,7 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
           onClick={handleConfirm}
         >
           <FontAwesomeIcon icon={faCircleCheck} className="icon"/>
-          확정하기
+          {isEditMode ? "수정하기" : "확정하기"}
         </button>
       </div>
 
@@ -146,7 +145,6 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, onConfirmed}: Invo
         </p>
         <hr className="divider"/>
         <p>
-          {/* Client의 balance */}
           <span>전잔금:</span>
           <span className="summary-value">{previousBalance.toLocaleString()} 원</span>
         </p>

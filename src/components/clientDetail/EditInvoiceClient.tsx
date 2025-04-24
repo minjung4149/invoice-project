@@ -23,6 +23,7 @@ const EditInvoiceClient = () => {
   const invoiceId = Number(searchParams.get("invoiceId") || 1);
   const clientId = Number(searchParams.get("clientId") || 1);
   const clientName = searchParams.get("name") || "Unknown Client";
+  const [previousBalance, setPreviousBalance] = useState<number>(0);
 
   // 인보이스 입력 데이터 상태
   const [invoiceData, setInvoiceData] = useState<InvoiceData>({
@@ -42,6 +43,8 @@ const EditInvoiceClient = () => {
   const fetchInvoice = useCallback(async (invoiceId: number) => {
     try {
       const data = await getInvoiceById(invoiceId);
+
+      console.log("수정용 인보이스 데이터:", data);
 
       // 품목 정보 가공 (문자열로 변환 및 총액 계산)
       const items: InvoiceItem[] = (data.details || []).map((item: {
@@ -70,6 +73,7 @@ const EditInvoiceClient = () => {
       };
 
       setInvoiceData(formData);
+      setPreviousBalance(data.previousBalance ?? 0);
     } catch (error) {
       // 인보이스 데이터 호출 실패 시 콘솔 출력
       console.error("수정용 인보이스 로딩 실패:", error);
@@ -103,6 +107,8 @@ const EditInvoiceClient = () => {
                 invoiceData={invoiceData}
                 clientName={clientName}
                 isUpdated={isUpdated}
+                previousBalance={previousBalance}
+                isEditMode={true}
               />
             </div>
           </div>

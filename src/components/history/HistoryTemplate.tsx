@@ -46,6 +46,8 @@ const HistoryTemplate = ({selectedOrder}: HistoryTemplateProps) => {
 
   const [invoiceDetail, setInvoiceDetail] = useState<InvoiceDetail | null>(null);
 
+  console.log("invoiceDetail:", invoiceDetail);
+
   // 선택된 주문 ID가 바뀔 때마다 상세 내역 호출
   useEffect(() => {
     if (!selectedOrder || selectedOrder.id === 0) return;
@@ -70,12 +72,12 @@ const HistoryTemplate = ({selectedOrder}: HistoryTemplateProps) => {
           };
         });
 
-        const subtotal = items.reduce((sum, item) => sum + item.total, 0);
-        const prevBalance = raw.client?.balance ?? 0; // 서버에서 값으로 교체 예정
-        const total = subtotal + prevBalance;
-        const payment = 0; // 서버에서 값으로 교체 예정
-        const balance = total - payment;
-        const note = ""; // 서버에서 값으로 교체 예정
+        const subtotal = raw.subtotal ?? items.reduce((sum, item) => sum + item.total, 0);
+        const prevBalance = raw.prevBalance ?? 0;
+        const total = raw.total ?? subtotal + prevBalance;
+        const payment = raw.payment ?? 0;
+        const balance = raw.balance ?? (total - payment);
+        const note = raw.note ?? "";
 
         setInvoiceDetail({
           items,
