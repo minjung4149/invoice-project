@@ -39,6 +39,7 @@ interface HistoryTableProps {
   clientId: number;
   clientName: string;
   onSelectOrder: (order: OrderData) => void; // 주문 선택 시 부모로 전달되는 콜백
+  printRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -49,7 +50,7 @@ interface HistoryTableProps {
  * - 무한 스크롤로 점진적 데이터 로딩
  * - 주문 수정 버튼은 최신 주문에만 노출
  */
-const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) => {
+const HistoryTable = ({clientId, clientName, onSelectOrder, printRef}: HistoryTableProps) => {
   const router = useRouter();
   const itemsPerPage = 10;
 
@@ -155,6 +156,24 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
       : latestId;
   }, data[0]?.id);
 
+
+  const handlePrint = () => {
+    const printContents = document.getElementById("print-area")?.innerHTML;
+    const originalContents = document.body.innerHTML;
+
+    if (!printContents) return;
+
+    document.body.innerHTML = printContents;
+    window.print();
+
+    // 인쇄 후 원래 화면 복원
+    document.body.innerHTML = originalContents;
+
+    // 렌더링 트리거 (Next.js에서 중요)
+    window.location.reload();
+  };
+
+
   return (
     <div className="table-container">
       <table className="order-table">
@@ -179,7 +198,15 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
             <td className="total">{parseInt(order.total, 10).toLocaleString()}</td>
             <td className="balance">{parseInt(order.balance, 10).toLocaleString()}</td>
             <td>
-              <button className="detail-button print">인쇄</button>
+              <button
+                className="detail-button print"
+                onClick={(e) => {
+                  e.stopPropagation(); // 부모 row 클릭 방지
+                  handlePrint();       // 프린트 실행
+                }}
+              >
+                인쇄
+              </button>
               {order.id === latestOrderId && (
                 <button
                   className="detail-button edit ml-8"
