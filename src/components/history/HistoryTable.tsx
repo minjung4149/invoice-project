@@ -39,7 +39,6 @@ interface HistoryTableProps {
   clientId: number;
   clientName: string;
   onSelectOrder: (order: OrderData) => void; // 주문 선택 시 부모로 전달되는 콜백
-  printRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -50,7 +49,7 @@ interface HistoryTableProps {
  * - 무한 스크롤로 점진적 데이터 로딩
  * - 주문 수정 버튼은 최신 주문에만 노출
  */
-const HistoryTable = ({clientId, clientName, onSelectOrder, printRef}: HistoryTableProps) => {
+const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) => {
   const router = useRouter();
   const itemsPerPage = 10;
 

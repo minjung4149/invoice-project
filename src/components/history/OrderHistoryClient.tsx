@@ -112,7 +112,6 @@ const OrderHistoryClient = () => {
                 clientId={clientId}
                 clientName={clientName}
                 onSelectOrder={setSelectedOrder}
-                printRef={printRef} // printRef 전달
               />
 
               {/* 선택된 주문 정보 전달 */}
