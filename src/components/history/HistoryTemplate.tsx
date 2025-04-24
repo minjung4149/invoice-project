@@ -164,5 +164,5 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
     );
   }
 );
-
+HistoryTemplate.displayName = "HistoryTemplate";
 export default HistoryTemplate;
