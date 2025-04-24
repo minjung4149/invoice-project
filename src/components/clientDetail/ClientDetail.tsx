@@ -3,7 +3,7 @@ import {useState, useEffect, useCallback, useRef} from "react";
 import {useSearchParams} from "next/navigation";
 import ClientInputForm from "@/components/clientDetail/ClientInputForm";
 import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
-import {getLatestInvoiceByClientId, getInvoiceById} from "@/utils/api";
+import {getLatestInvoiceByClientId} from "@/utils/api";
 import {InvoiceData} from "@/types/common";
 
 /**
