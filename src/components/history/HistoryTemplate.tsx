@@ -56,6 +56,8 @@ const HistoryTemplate = ({selectedOrder}: HistoryTemplateProps) => {
       try {
         const raw = await getInvoiceById(selectedOrder.id);
 
+        console.log("상세 내역:", raw);
+
         // 서버에서 받은 상세 품목 데이터를 프론트에서 직접 가공
         const items: Item[] = (raw.details as Array<{
           name: string;
@@ -73,7 +75,7 @@ const HistoryTemplate = ({selectedOrder}: HistoryTemplateProps) => {
         });
 
         const subtotal = raw.subtotal ?? items.reduce((sum, item) => sum + item.total, 0);
-        const prevBalance = raw.prevBalance ?? 0;
+        const prevBalance = raw.previousBalance ?? 0;
         const total = raw.total ?? subtotal + prevBalance;
         const payment = raw.payment ?? 0;
         const balance = raw.balance ?? (total - payment);

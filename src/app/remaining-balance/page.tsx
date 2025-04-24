@@ -20,13 +20,11 @@ const BalancePage = async () => {
   try {
     // 서버에서 거래처 잔금 데이터 호출
     balanceData = await getClientBalance();
-    console.log("받은 값:", balanceData);
 
     // 전체 잔금 합계 계산
-    totalBalance = balanceData.reduce(
-      (sum: number, client: ClientBalance) => sum + client.balance,
-      0
-    );
+    totalBalance = balanceData
+      .filter((client) => client.balance > 0) // 양수만 필터링
+      .reduce((sum, client) => sum + client.balance, 0);
   } catch (error) {
     console.error("잔금 데이터 불러오기 실패:", error);
     // API 호출 실패 시: 빈 배열과 0으로 초기화

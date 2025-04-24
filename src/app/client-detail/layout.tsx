@@ -8,7 +8,7 @@ type LayoutProps = {
 const Layout = ({children}: LayoutProps) => {
   return (
     <>
-      <Suspense fallback={<p>로딩 중...</p>}>
+      <Suspense fallback={<p></p>}>
         <HeaderDetailClient/>
       </Suspense>
       {children}
