@@ -1,6 +1,6 @@
 import {NextResponse} from 'next/server';
 import {prisma} from '@/lib/prisma';
-import {Prisma as PrismaUtils} from '@prisma/client';
+import {Prisma} from '@prisma/client';
 
 // GET 요청 - 특정 Client의 Invoice 리스트 조회 (InvoiceDetail 가격 합계 포함)
 export async function GET(req: Request) {
@@ -32,19 +32,29 @@ export async function GET(req: Request) {
         ORDER BY i."createDate" DESC
     `;
 
-    // InvoiceDetail 합계 가져오기 (별도 쿼리 → 성능 좋게 하기 위해)
-    const totals: { invoiceId: number; total: number }[] = await prisma.$queryRaw`
-        SELECT "invoiceId",
-               SUM(quantity * price) AS total
-        FROM "InvoiceDetail"
-        WHERE "invoiceId" IN (${PrismaUtils.join(invoices.map(inv => inv.id))})
-        GROUP BY "invoiceId"
-    `;
+    // invoiceIds 목록 추출
+    const invoiceIds = invoices.map(inv => inv.id);
+
+    // InvoiceDetail 합계 가져오기 (Prisma.sql 및 Prisma.join 사용)
+    const totals: { invoiceId: number; total: number }[] = invoiceIds.length > 0
+      ? await prisma.$queryRaw<
+        { invoiceId: number; total: number }[]
+      >(
+        Prisma.sql`
+            SELECT "invoiceId",
+                   SUM(quantity * price) AS total
+            FROM "InvoiceDetail"
+            WHERE "invoiceId" IN (${Prisma.join(invoiceIds)})
+            GROUP BY "invoiceId"
+        `
+      )
+      : [];
 
     // total 정보와 merge
     const formattedInvoices = invoices.map((invoice) => {
       const totalRaw = totals.find(t => t.invoiceId === invoice.id)?.total ?? 0;
       const total = typeof totalRaw === 'bigint' ? Number(totalRaw) : totalRaw;
+
       return {
         id: invoice.id,
         no: invoice.no,
