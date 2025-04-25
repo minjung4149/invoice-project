@@ -108,6 +108,7 @@ const EditInvoiceClient = () => {
                 clientName={clientName}
                 isUpdated={isUpdated}
                 previousBalance={previousBalance}
+                invoiceId={invoiceId}
                 isEditMode={true}
               />
             </div>

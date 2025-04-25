@@ -199,6 +199,7 @@ export const getLatestInvoiceByClientId = async (clientId: number) => {
   }
 };
 
+// 거래 내역 신규 등록 api
 export const createInvoice = async (invoiceData: InvoiceRequest) => {
   try {
     const response = await fetch('/api/invoice/create', {
@@ -216,6 +217,28 @@ export const createInvoice = async (invoiceData: InvoiceRequest) => {
     return await response.json();
   } catch (error) {
     console.error('Failed to create invoice:', error);
+    throw error;
+  }
+};
+
+// 거래 내역 수정 api
+export const updateInvoice = async (invoiceData: InvoiceRequest & { id: number }) => {
+  try {
+    const response = await fetch('/api/invoice/update', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(invoiceData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to update invoice:', error);
     throw error;
   }
 };

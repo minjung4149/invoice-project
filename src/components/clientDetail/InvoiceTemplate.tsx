@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck} from "@fortawesome/free-solid-svg-icons";
 import {InvoiceData} from "@/types/common";
-import {createInvoice} from "@/utils/api";
+import {createInvoice, updateInvoice} from "@/utils/api";
 import {useRouter} from "next/navigation";
 
 interface InvoiceTemplateProps {
@@ -11,6 +11,7 @@ interface InvoiceTemplateProps {
   clientName: string; // 거래처 이름
   isUpdated: boolean; // 반영 완료 여부
   previousBalance: number;
+  invoiceId?: number;
   onConfirmed?: () => void; // 확정 후 호출되는 콜백
   isEditMode?: boolean;
 }
@@ -23,7 +24,15 @@ interface InvoiceTemplateProps {
  * - 소계/입금액/잔금 등의 요약 정보도 함께 계산하여 표시
  * - 확정 버튼 클릭 시 입력값 유효성 검증 후 서버에 전송
  */
-const InvoiceTemplate = ({invoiceData, clientName, isUpdated, previousBalance, onConfirmed, isEditMode}: InvoiceTemplateProps) => {
+const InvoiceTemplate = ({
+                           invoiceData,
+                           clientName,
+                           isUpdated,
+                           previousBalance,
+                           invoiceId,
+                           onConfirmed,
+                           isEditMode
+                         }: InvoiceTemplateProps) => {
   const router = useRouter();
   // 확인 여부 상태 (제출 후 true)
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -69,7 +78,7 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, previousBalance, o
       const payment = parseInt(invoiceData.payment.replace(/,/g, ""), 10) || 0;
 
       // 서버에 전송할 데이터 구성
-      const requestData = {
+      const commonRequestData = {
         no: invoiceNo,
         clientId,
         balance,
@@ -82,12 +91,17 @@ const InvoiceTemplate = ({invoiceData, clientName, isUpdated, previousBalance, o
         })),
       };
 
-      // 서버에 인보이스 생성 요청
-      await createInvoice(requestData);
+      // isEditMode 여부에 따라 분기 처리
+      if (isEditMode && invoiceId) {
+        await updateInvoice({id: invoiceId, ...commonRequestData});
+        alert("수정되었습니다.");
+      } else {
+        await createInvoice(commonRequestData);
+        alert("확정 처리되었습니다.");
+      }
 
       // 성공 처리
       setIsConfirmed(true);
-      alert("확정 처리되었습니다.");
       if (onConfirmed) onConfirmed();
 
       // 주문 내역 페이지로 이동
