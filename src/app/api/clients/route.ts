@@ -1,9 +1,6 @@
 import {NextResponse} from 'next/server';
-import {PrismaClient} from '@prisma/client';
+import {prisma} from '@/lib/prisma'; // 상대경로는 상황에 따라 조정
 
-const prisma = new PrismaClient();
-
-// GET 요청 - 모든 Client 조회
 export async function GET() {
   try {
     const clients = await prisma.client.findMany();
