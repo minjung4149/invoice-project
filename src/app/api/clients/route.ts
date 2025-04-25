@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {prisma} from '@/lib/prisma'; // 상대경로는 상황에 따라 조정
+import {prisma} from '@/lib/prisma';
 
 export async function GET() {
   try {
