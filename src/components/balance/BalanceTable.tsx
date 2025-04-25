@@ -24,8 +24,10 @@ interface BalanceTableProps {
  * - 날짜는 formatDate, 연락처는 formatPhone 유틸 함수로 포맷 처리
  */
 const BalanceTable = ({data}: BalanceTableProps) => {
-  // 잔금 기준으로 내림차순 정렬
-  const sorted = [...data].sort((a, b) => b.balance - a.balance);
+// 0보다 큰 잔금만 필터링 후, 내림차순 정렬
+  const filteredSorted = data
+    .filter(client => client.balance > 0)
+    .sort((a, b) => b.balance - a.balance);
 
   return (
     <div className="balance-list">
@@ -42,7 +44,7 @@ const BalanceTable = ({data}: BalanceTableProps) => {
           </tr>
           </thead>
           <tbody>
-          {sorted.map(({clientId, name, phone, latestInvoiceDate, balance}, index) => (
+          {filteredSorted.map(({clientId, name, phone, latestInvoiceDate, balance}, index) => (
             <tr key={clientId}>
               <td className="id">{index + 1}</td>
               <td className="date">{formatDate(latestInvoiceDate)}</td>
