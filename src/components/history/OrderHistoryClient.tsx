@@ -122,7 +122,7 @@ const OrderHistoryClient = () => {
       </main>
 
       {/* 인쇄 영역 */}
-      <div style={{display: "none"}}>
+      <div className="print-only">
         <div id="print-area">
           <div style={{display: "flex", flexDirection: "row", gap: 0, width: "210mm"}}>
             <div className="print-half">{printable}</div>

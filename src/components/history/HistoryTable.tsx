@@ -82,8 +82,6 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
   const getInvoices = async (id: number) => {
     try {
       const clientInvoice = await getInvoicesByClientId(id);
-
-      console.log('clientInvoice', clientInvoice)
       setData(
         clientInvoice.invoices.map((invoice: OrderData) => ({
           id: invoice.id,
@@ -110,7 +108,7 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
     }
   }, [data]);
 
-  // selectedOrder 기본값 설정 (초기 렌더 시 첫 번째 주문 자동 선택)
+  // selectedOrder 기본값 설정 (초기 렌더 시 최근 주문 자동 선택)
   useEffect(() => {
     if (data.length > 0 && !selectedOrder) {
       const latest = data[0];
@@ -155,23 +153,10 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
       : latestId;
   }, data[0]?.id);
 
-
+  // 인쇄 버튼 클릭 시 실행
   const handlePrint = () => {
-    const printContents = document.getElementById("print-area")?.innerHTML;
-    const originalContents = document.body.innerHTML;
-
-    if (!printContents) return;
-
-    document.body.innerHTML = printContents;
     window.print();
-
-    // 인쇄 후 원래 화면 복원
-    document.body.innerHTML = originalContents;
-
-    // 렌더링 트리거 (Next.js에서 중요)
-    window.location.reload();
   };
-
 
   return (
     <div className="table-container">

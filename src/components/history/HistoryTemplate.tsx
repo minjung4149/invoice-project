@@ -65,9 +65,7 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
                 const [year, month, day] = datePart.split("-");
                 return (
                   <>
-                    <p>
-                      西紀 {year}년 {month}월 {day}일
-                    </p>
+                    <p>西紀 {year}년 {month}월 {day}일</p>
                     <p>下記와 如히 計算함</p>
                   </>
                 );
