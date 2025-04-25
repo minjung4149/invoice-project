@@ -1,5 +1,6 @@
 "use client";
 import {useState} from "react";
+import {useRouter} from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import ClientRegisterModal from "@/components/main/ClientModal";
@@ -27,6 +28,7 @@ interface ClientListProps {
  * - 수정/즐겨찾기 기능을 제공하는 클라이언트 전용 컴포넌트
  */
 const ClientList = ({clients, onRefresh}: ClientListProps) => {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
@@ -60,25 +62,42 @@ const ClientList = ({clients, onRefresh}: ClientListProps) => {
     }
   };
 
+  // 거래처 상세 페이지로 이동
+  const handleGoToHistory = (client: { name: string; id: number | null }) => {
+    if (client.id === null) return; // 방어 코드
+
+    const query = new URLSearchParams({
+      name: client.name,
+      clientId: String(client.id),
+    }).toString();
+
+    router.push(`/client-detail/order-history?${query}`);
+  };
+
   return (
     <div className="client-list">
       <h2 className="under-line"> 거래처 리스트</h2>
       <ul>
         {clients.map((client) => (
           <li key={client.id}>
-            <div className="client-action">
-              <button onClick={() => handleEditClick(client)}>
-                <Image src="/images/edit.png" alt="수정" width={24} height={24}/>
+            <div className="client-action-wrap">
+              <button onClick={() => handleGoToHistory(client)}>
+                <Image src="/images/list.png" alt="거래내역 리스트" width={24} height={24}/>
               </button>
+              <div className="client-action">
+                <button onClick={() => handleEditClick(client)}>
+                  <Image src="/images/edit.png" alt="수정" width={24} height={24}/>
+                </button>
 
-              <button onClick={() => toggleFavorite(client.id ?? 0, client.isFavorite)}>
-                <Image
-                  src={client.isFavorite ? "/images/favorite-on.png" : "/images/favorite-off.png"}
-                  alt="즐겨찾기"
-                  width={24}
-                  height={24}
-                />
-              </button>
+                <button onClick={() => toggleFavorite(client.id ?? 0, client.isFavorite)}>
+                  <Image
+                    src={client.isFavorite ? "/images/favorite-on.png" : "/images/favorite-off.png"}
+                    alt="즐겨찾기"
+                    width={24}
+                    height={24}
+                  />
+                </button>
+              </div>
             </div>
             <div className="client-info">
               <Link
