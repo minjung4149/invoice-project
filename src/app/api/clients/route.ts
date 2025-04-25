@@ -1,5 +1,3 @@
-// pages/api/client.ts
-
 import {NextResponse} from 'next/server';
 import {PrismaClient} from '@prisma/client';
 
