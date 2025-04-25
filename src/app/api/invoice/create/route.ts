@@ -1,5 +1,6 @@
 import {NextResponse} from 'next/server';
 import {prisma} from '@/lib/prisma';
+import {Prisma} from '@prisma/client';
 
 // POST 요청 - Invoice 및 InvoiceDetail을 함께 등록
 export async function POST(req: Request) {
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     // 트랜잭션을 사용하여 Invoice 및 InvoiceDetail 저장
-    const createdInvoice = await prisma.$transaction(async (tx) => {
+    const createdInvoice = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Invoice 생성
       const invoice = await tx.invoice.create({
         data: {
