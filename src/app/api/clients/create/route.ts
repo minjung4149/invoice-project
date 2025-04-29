@@ -5,8 +5,6 @@ import {prisma} from '@/lib/prisma';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log("받은 요청 데이터:", body); // 요청 데이터 확인
-
     const {name, phone, note, isFavorite} = body;
 
     // 필수 데이터 확인
@@ -25,7 +23,6 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log("성공적으로 생성된 데이터:", newClient);
     return NextResponse.json(newClient, {status: 201});
   } catch (error) {
     console.error('Error creating client:', error);

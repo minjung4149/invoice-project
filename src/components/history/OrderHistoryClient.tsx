@@ -57,8 +57,6 @@ const OrderHistoryClient = () => {
       try {
         const raw = await getInvoiceById(selectedOrder.id);
 
-        console.log("상세 내역:", raw);
-
         // 서버에서 받은 상세 품목 데이터를 프론트에서 직접 가공
         const items: Item[] = (raw.details as Array<{
           name: string;

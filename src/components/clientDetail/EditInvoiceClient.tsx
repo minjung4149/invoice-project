@@ -44,8 +44,6 @@ const EditInvoiceClient = () => {
     try {
       const data = await getInvoiceById(invoiceId);
 
-      console.log("수정용 인보이스 데이터:", data);
-
       // 품목 정보 가공 (문자열로 변환 및 총액 계산)
       const items: InvoiceItem[] = (data.details || []).map((item: {
         name: string;
@@ -54,7 +52,7 @@ const EditInvoiceClient = () => {
       }) => ({
         name: item.name,
         quantity: item.quantity.toString(),
-        price: item.price.toString(),
+        price: item.price.toLocaleString(),
         total: (item.quantity * item.price).toLocaleString(),
       }));
 

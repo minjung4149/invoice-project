@@ -128,7 +128,7 @@ export const getClientList = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    console.log('Clients:', data.clients);
+
     return data.clients;
   } catch (error) {
     console.error('Error fetching clients:', error);
@@ -150,7 +150,6 @@ export const getClientBalance = async () => {
     if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
     const result = await response.json();
-    console.log("API 응답 결과:", result);
 
     return result.clients;
   } catch (error) {
