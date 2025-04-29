@@ -4,19 +4,36 @@ import {useRouter} from "next/navigation";
 import {getInvoicesByClientId} from "@/utils/api";
 
 // 테이블에서만 사용하는 날짜 포맷터: "2025-04-09(수) 14:19"
-const formatDateWithWeekday = (isoString: string) => {
+export const formatDateWithWeekday = (isoString: string) => {
   const date = new Date(isoString);
-  const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const weekday = weekdays[date.getDay()];
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
+  // Intl을 이용해 Asia/Seoul 타임존 기준으로 포맷팅
+  const formatter = new Intl.DateTimeFormat("ko-KR", {
+    timeZone: "Asia/Seoul", // 서울 기준
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short", // 요일 (월, 화, 수, 등)
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false, // 24시간제
+  });
+
+  const parts = formatter.formatToParts(date);
+
+  // 포맷 조합
+  const year = parts.find(p => p.type === "year")?.value;
+  const month = parts.find(p => p.type === "month")?.value;
+  const day = parts.find(p => p.type === "day")?.value;
+  const weekday = parts.find(p => p.type === "weekday")?.value;
+  const hour = parts.find(p => p.type === "hour")?.value;
+  const minute = parts.find(p => p.type === "minute")?.value;
+
+  if (!year || !month || !day || !weekday || !hour || !minute) return "";
 
   return `${year}-${month}-${day}(${weekday}) ${hour}:${minute}`;
 };
+
 
 // 주문 데이터 타입 정의
 interface OrderData {
