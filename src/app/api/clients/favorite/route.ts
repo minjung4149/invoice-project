@@ -1,7 +1,5 @@
 import {NextResponse} from 'next/server';
-import {PrismaClient} from '@prisma/client';
-
-const prisma = new PrismaClient();
+import {prisma} from '@/lib/prisma';
 
 // PUT 요청 - Client의 즐겨찾기 상태 업데이트
 export async function PUT(req: Request) {

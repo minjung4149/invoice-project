@@ -1,7 +1,5 @@
 import {NextResponse} from 'next/server';
-import {PrismaClient} from '@prisma/client';
-
-const prisma = new PrismaClient();
+import {prisma} from '@/lib/prisma';
 
 // PUT 요청 - 특정 Client의 balance 업데이트
 export async function PUT(req: Request) {
