@@ -1,4 +1,3 @@
-// 디버깅용
 export async function GET() {
   return new Response(
     JSON.stringify({
