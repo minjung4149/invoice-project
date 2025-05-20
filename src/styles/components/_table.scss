@@ -64,10 +64,16 @@ table {
         padding: 6px 12px;
         border-radius: 4px;
         @include secondary;
+        margin: 0 2.5px;
 
         &.edit {
           background-color: #d9534f;
           border: 1px solid #d9534f;
+        }
+
+        &.img {
+          background-color: #17a2b8;
+          border: 1px solid #17a2b8;
         }
       }
     }
@@ -118,5 +124,30 @@ table {
         font-weight: bold;
       }
     }
+  }
+}
+
+
+//테스트
+.invoice-download-style {
+  .invoice {
+    background: white;
+    color: #000;
+    font-size: 14px;
+    padding: 24px;
+    width: 800px;
+    box-sizing: border-box;
+  }
+
+  .invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: center;
   }
 }

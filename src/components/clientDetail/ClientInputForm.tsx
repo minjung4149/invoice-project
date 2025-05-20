@@ -12,9 +12,13 @@ interface ClientInputFormProps {
   setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// 숫자 포맷팅 함수 (천 단위 콤마 추가)
+// 숫자 포맷팅 함수: 음수 허용하도록
 const formatNumber = (value: string) => {
-  return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const cleaned = value.replace(/[^\d-]/g, ""); // 숫자와 마이너스만 허용
+  const isNegative = cleaned.startsWith("-");
+  const number = cleaned.replace(/-/g, ""); // 마이너스 제거 후 콤마 처리
+  const formatted = number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return isNegative ? `-${formatted}` : formatted;
 };
 
 // 숫자를 한글 금액으로 변환하는 함수 (예: 123456 → 십이만삼천사백오십육 원)
@@ -93,6 +97,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
     day: currentDay,
     items: Array.from({length: 5}, () => ({
       name: "",
+      spec: "",
       quantity: "",
       price: "",
       total: ""
@@ -114,6 +119,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
         ? invoiceData.items
         : Array.from({length: 5}, () => ({
           name: "",
+          spec: "",
           quantity: "",
           price: "",
           total: ""
@@ -158,7 +164,9 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
 
   // 개별 항목 변경 핸들러 (수량과 가격 변경 시 `total` 자동 계산)
   const handleItemChange = (index: number, field: keyof InvoiceItem, value: string) => {
-    const formattedValue = field === "quantity" || field === "price" ? formatNumber(value) : value;
+    const formattedValue = field === "quantity" || field === "price"
+      ? formatNumber(value)
+      : value;
 
     setFormData((prev) => {
       const updatedItems = prev.items.map((item, i) => {
@@ -200,7 +208,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
   const handleAddItem = () => {
     setFormData((prev) => ({
       ...prev,
-      items: [...prev.items, {name: "", quantity: "", price: "", total: ""}],
+      items: [...prev.items, {name: "", spec: "", quantity: "", price: "", total: ""}],
     }));
 
     setErrors((prev) => ({
@@ -301,6 +309,7 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
         <div className="input-header">
           <span className="left">No.</span>
           <span>품명</span>
+          <span>규격</span>
           <span>수량</span>
           <span>단가</span>
           <span></span>
@@ -316,6 +325,12 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
               className={errors.items[index] && !item.name ? "error-border" : ""}
               onFocus={() => handleFocus(index)} // 포커스 감지
               onChange={(e) => handleItemChange(index, "name", e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="규격"
+              value={item.spec}
+              onChange={(e) => handleItemChange(index, "spec", e.target.value)}
             />
             <input
               type="text"

@@ -86,6 +86,7 @@ const InvoiceTemplate = ({
         note: invoiceData.note,
         details: invoiceData.items.map((item) => ({
           name: item.name,
+          spec: item.spec,
           quantity: parseInt(item.quantity, 10),
           price: parseInt(item.price.toString().replace(/,/g, ""), 10),
         })),
@@ -130,6 +131,7 @@ const InvoiceTemplate = ({
         <tr>
           <th className="no">No.</th>
           <th className="name">품명</th>
+          <th className="spec">규격</th>
           <th className="quantity">수량</th>
           <th className="price">단가</th>
           <th className="total">금액</th>
@@ -140,6 +142,7 @@ const InvoiceTemplate = ({
           <tr key={index}>
             <td className="no">{index + 1}</td>
             <td className="name">{item.name}</td>
+            <td className="spec">{item.spec}</td>
             <td className="quantity">{item.quantity}</td>
             <td className="price">{item.price ? item.price.toLocaleString() : "-"}</td>
             <td className="total">{item.total ? item.total.toLocaleString() : "-"}</td>

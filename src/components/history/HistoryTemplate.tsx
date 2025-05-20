@@ -14,6 +14,7 @@ interface OrderData {
 interface Item {
   id: number;
   name: string;
+  spec?: string;
   quantity: number;
   price: number;
   total: number;
@@ -42,7 +43,7 @@ interface HistoryTemplateProps {
  * - 품목 테이블 + 요약 정보(소계, 전잔금, 입금, 잔금, 비고) 제공
  */
 const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
-  ({selectedOrder, invoiceDetail}, ref) => {
+  function HistoryTemplate({ selectedOrder, invoiceDetail }, ref) {
 
     const searchParams = useSearchParams(); // URL 파라미터 접근
     const clientName = searchParams.get("name") || ""; // 클라이언트 이름
@@ -80,8 +81,8 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
             <p className="spacing">서영민</p>
             <p>대구광역시 북구 매천로18길 34</p>
             <p><strong>전화:</strong> (053) 311-4149</p>
+            <p><strong>휴대폰:</strong> 010-7710-1883</p>
             <p><strong>휴대폰:</strong> 010-8596-4149</p>
-            <p><strong>휴대폰:</strong> 010-3532-4149</p>
           </div>
         </div>
 
@@ -93,6 +94,7 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
           <tr>
             <th className="no">No.</th>
             <th className="name">품명</th>
+            <th className="spec">규격</th>
             <th className="quantity">수량</th>
             <th className="price">단가</th>
             <th className="total">금액</th>
@@ -104,6 +106,7 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
               <tr key={item.id}>
                 <td className="no">{idx + 1}</td>
                 <td className="name">{item.name}</td>
+                <td className="spec">{item.spec}</td>
                 <td className="quantity">{item.quantity}</td>
                 <td className="price">{item.price.toLocaleString()} 원</td>
                 <td className="total">{item.total.toLocaleString()} 원</td>

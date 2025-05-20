@@ -39,6 +39,14 @@ button, a {
   }
 }
 
+.order-table {
+  button, a {
+    svg {
+      margin-right: 0px;
+    }
+  }
+}
+
 //닫기 버튼 공통
 .remove-btn, .close-btn {
   background: #E53E3E;

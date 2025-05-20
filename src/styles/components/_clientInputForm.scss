@@ -84,8 +84,9 @@
     gap: 10px;
 
     .input-header {
+      width: 100%;
       display: grid;
-      grid-template-columns: 30px 1fr 1fr 1fr 30px;
+      grid-template-columns: 0.5fr 5fr 2.5fr 1fr 5fr 0.5fr;
       align-items: center;
       font-weight: bold;
       padding: 10px;
@@ -101,23 +102,23 @@
     }
 
     .input-row {
-      display: flex;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 0.5fr 4.5fr 2.5fr 1.5fr 3fr 0.5fr;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
 
       span {
-        width: 25px;
         text-align: center;
         font-weight: bold;
         font-size: 15px;
       }
 
       input {
-        flex: 1;
+        width: 100%;
 
         &.quantity,
         &.price {
-          width: 100px;
           text-align: right;
         }
       }

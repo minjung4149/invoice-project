@@ -4,6 +4,7 @@ import {useSearchParams} from "next/navigation";
 import HistoryTable from "@/components/history/HistoryTable";
 import HistoryTemplate from "@/components/history/HistoryTemplate";
 import {getInvoiceById} from "@/utils/api";
+import {toPng} from "html-to-image";
 
 // 품목 데이터 타입
 interface Item {
@@ -48,6 +49,31 @@ const OrderHistoryClient = () => {
     total: "0",
     balance: "0",
   });
+
+  const printRef = useRef<HTMLDivElement>(null); // 프린트 영역
+  const printable = <HistoryTemplate selectedOrder={selectedOrder} invoiceDetail={invoiceDetail}/>;
+  const imageDownloadRef = useRef<HTMLDivElement>(null); // 이미지 저장용 ref
+
+
+  const handleDownloadAsImage = async () => {
+    if (!imageDownloadRef.current) return;
+
+    try {
+      const dataUrl = await toPng(imageDownloadRef.current, {
+        backgroundColor: "#fff", // 배경이 투명하면 오류 나는 경우도 방지
+      });
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      const orderDate = selectedOrder?.createDate?.split("T")[0]; // "2025-05-20"
+      const sanitizedName = clientName.replace(/\s+/g, "-").replace(/[\\/:*?"<>|]/g, "-");
+      const fileName = `${orderDate}-${sanitizedName}.png`;
+      link.download = fileName;
+      link.click();
+    } catch (err) {
+      console.error("이미지 생성 실패:", err);
+      alert("이미지 저장 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
+    }
+  };
 
   // 선택된 주문 ID가 바뀔 때마다 상세 내역 호출
   useEffect(() => {
@@ -97,8 +123,6 @@ const OrderHistoryClient = () => {
     fetchDetail();
   }, [selectedOrder]);
 
-  const printRef = useRef<HTMLDivElement>(null);
-  const printable = <HistoryTemplate selectedOrder={selectedOrder} invoiceDetail={invoiceDetail}/>;
   return (
     <>
       <main className="site-content">
@@ -110,6 +134,7 @@ const OrderHistoryClient = () => {
                 clientId={clientId}
                 clientName={clientName}
                 onSelectOrder={setSelectedOrder}
+                onDownloadImage={handleDownloadAsImage}
               />
 
               {/* 선택된 주문 정보 전달 */}
@@ -127,6 +152,23 @@ const OrderHistoryClient = () => {
             <div className="print-half">{printable}</div>
           </div>
         </div>
+      </div>
+      <div
+        className="invoice-download-style"
+        style={{
+          position: "fixed",      // 뷰포트에 고정
+          top: 0,
+          left: 0,
+          zIndex: -1,             // 다른 콘텐츠보다 뒤에 배치
+          opacity: 0,             // 화면에서는 보이지 않지만 렌더링 됨
+          pointerEvents: "none",  // 사용자 이벤트 차단
+        }}
+      >
+        <HistoryTemplate
+          ref={imageDownloadRef}
+          selectedOrder={selectedOrder}
+          invoiceDetail={invoiceDetail}
+        />
       </div>
     </>
   );

@@ -2,6 +2,8 @@
 import React, {useState, useEffect, useRef, useReducer} from "react";
 import {useRouter} from "next/navigation";
 import {getInvoicesByClientId} from "@/utils/api";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPenToSquare, faPrint, faImage} from "@fortawesome/free-solid-svg-icons";
 
 // 테이블에서만 사용하는 날짜 포맷터: "2025-04-09(수) 14:19"
 export const formatDateWithWeekday = (isoString: string) => {
@@ -56,6 +58,7 @@ interface HistoryTableProps {
   clientId: number;
   clientName: string;
   onSelectOrder: (order: OrderData) => void; // 주문 선택 시 부모로 전달되는 콜백
+  onDownloadImage: () => void;
 }
 
 /**
@@ -66,7 +69,7 @@ interface HistoryTableProps {
  * - 무한 스크롤로 점진적 데이터 로딩
  * - 주문 수정 버튼은 최신 주문에만 노출
  */
-const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) => {
+const HistoryTable = ({clientId, clientName, onSelectOrder, onDownloadImage}: HistoryTableProps) => {
   const router = useRouter();
   const itemsPerPage = 10;
 
@@ -199,6 +202,18 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
             <td className="total">{parseInt(order.total, 10).toLocaleString()}</td>
             <td className="balance">{parseInt(order.balance, 10).toLocaleString()}</td>
             <td>
+              {order.id === latestOrderId && (
+                <button
+                  className="detail-button edit"
+                  onClick={() => {
+                    router.push(
+                      `/client-detail/edit-invoice?invoiceId=${order.id}&clientId=${clientId}&name=${encodeURIComponent(clientName)}`
+                    );
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} className="icon"/>
+                </button>
+              )}
               <button
                 className="detail-button print"
                 onClick={(e) => {
@@ -206,20 +221,17 @@ const HistoryTable = ({clientId, clientName, onSelectOrder}: HistoryTableProps) 
                   handlePrint();       // 프린트 실행
                 }}
               >
-                인쇄
+                <FontAwesomeIcon icon={faPrint} className="icon"/>
               </button>
-              {order.id === latestOrderId && (
-                <button
-                  className="detail-button edit ml-8"
-                  onClick={() => {
-                    router.push(
-                      `/client-detail/edit-invoice?invoiceId=${order.id}&clientId=${clientId}&name=${encodeURIComponent(clientName)}`
-                    );
-                  }}
-                >
-                  수정
-                </button>
-              )}
+              <button
+                className="detail-button img"
+                onClick={(e) => {
+                  e.stopPropagation(); // 부모 row 클릭 방지
+                  onDownloadImage();
+                }}
+              >
+                <FontAwesomeIcon icon={faImage} className="icon"/>
+              </button>
             </td>
           </tr>
         ))}

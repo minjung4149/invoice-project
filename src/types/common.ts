@@ -16,6 +16,7 @@ export interface InvoiceRequest {
 // 인보이스 아이템 데이터 타입 정의
 export interface InvoiceItem {
   name: string;
+  spec: string;
   quantity: string;
   price: string;
   total: string;
