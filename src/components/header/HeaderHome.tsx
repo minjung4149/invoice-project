@@ -1,22 +1,39 @@
+"use client";
 import React from 'react';
 import Link from "next/link";
+import {usePathname} from "next/navigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHouse} from "@fortawesome/free-solid-svg-icons";
-
 
 /**
  * HeaderHome 컴포넌트
  *
- * 거래처 잔금 현황 페이지 상단에 표시되는 헤더 UI
- * - 제목: "거래처 잔금 현황"
- * - "홈으로" 이동 버튼 제공
+ * URL 경로에 따라 동적으로 타이틀을 출력하는 공통 헤더 컴포넌트
+ * - 경로별 타이틀 매핑 객체 기반으로 유연하게 처리 가능
+ * - 매칭되지 않으면 기본값: "현황 페이지"
  */
 const HeaderHome = () => {
+  const pathname = usePathname();
+
+  // 경로별 타이틀 매핑
+  const titleMap: { [key: string]: string } = {
+    "/balance": "거래처 잔금 현황",
+    "/sales": "한달 기준 매출 현황",
+  };
+
+  // 가장 먼저 일치하는 경로 키 찾기
+  const matchedPath = Object.keys(titleMap).find((key) =>
+    pathname.startsWith(key)
+  );
+
+  // 매칭된 타이틀 없으면 기본값
+  const title = matchedPath ? titleMap[matchedPath] : "현황 페이지";
+
   return (
     <header>
       <div className="container">
         <div className="header_wrapper">
-          <h1>거래처 잔금 현황</h1>
+          <h1>{title}</h1>
           <div className="btn-area">
             <Link href="/main" className="default">
               <FontAwesomeIcon icon={faHouse} className="icon"/>
@@ -27,6 +44,6 @@ const HeaderHome = () => {
       </div>
     </header>
   );
-}
+};
 
 export default HeaderHome;

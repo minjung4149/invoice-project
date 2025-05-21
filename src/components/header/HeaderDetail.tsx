@@ -47,7 +47,7 @@ const HeaderDetail = ({clientName, clientId}: HeaderDetailProps) => {
                 className="default primary"
               >
                 <FontAwesomeIcon icon={isOrderHistoryPage ? faPen : faBars} className="icon"/>
-                {isOrderHistoryPage ? "계산서 작성" : "거래 내역 보기"}
+                {isOrderHistoryPage ? "계산서 작성" : "거래 내역"}
               </Link>
             )}
           </div>

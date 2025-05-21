@@ -41,7 +41,7 @@ header {
 
     .btn-area {
       @include flex-a-start;
-      gap: 20px;
+      gap: 16px;
 
       button, a {
         width: fit-content;

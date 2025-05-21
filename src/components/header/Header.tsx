@@ -2,7 +2,7 @@
 import {useState, useCallback} from "react";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faWonSign} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faWonSign, faCoins, faWallet} from "@fortawesome/free-solid-svg-icons";
 import ClientRegisterModal from "@/components/main/ClientModal";
 import {createClient} from '@/utils/api';
 
@@ -47,11 +47,19 @@ const Header = ({onClientRegistered}: { onClientRegistered: () => void }) => {
           <div className="btn-area">
             <button className="primary default" onClick={() => setIsRegisterModalOpen(true)}>
               <FontAwesomeIcon icon={faPlus} className="icon"/>
-              신규 거래처 등록
+              신규 등록
             </button>
-            <Link href="/remaining-balance" className="default">
+            <Link href="/balance" className="default">
               <FontAwesomeIcon icon={faWonSign} className="icon"/>
-              거래처 잔금 확인
+              잔금 확인
+            </Link>
+            <Link href="/sales" className="default">
+              <FontAwesomeIcon icon={faWallet} className="icon"/>
+              매출 현황
+            </Link>
+            <Link href="/" className="default">
+              <FontAwesomeIcon icon={faCoins} className="icon"/>
+              판매 현황
             </Link>
           </div>
         </div>

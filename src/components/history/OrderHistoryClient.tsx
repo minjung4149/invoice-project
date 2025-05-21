@@ -62,11 +62,22 @@ const OrderHistoryClient = () => {
       const dataUrl = await toPng(imageDownloadRef.current, {
         backgroundColor: "#fff", // 배경이 투명하면 오류 나는 경우도 방지
       });
+
+      const dateString = selectedOrder?.createDate || "";
+      const date = new Date(dateString);
+
+      // 요일 한글 배열: 0 = 일, 1 = 월, ...
+      const dayOfWeekKo = ["일", "월", "화", "수", "목", "금", "토"];
+      const year = date.getFullYear().toString().slice(2);
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const dayName = dayOfWeekKo[date.getDay()];
+      const formattedDate = `${year}-${month}-${day}(${dayName})`; // "25-05-20(화)"
+      const sanitizedName = clientName.replace(/\s+/g, "-").replace(/[\\/:*?"<>|]/g, "-");
+      const fileName = `${formattedDate}-${sanitizedName}.png`;
+
       const link = document.createElement("a");
       link.href = dataUrl;
-      const orderDate = selectedOrder?.createDate?.split("T")[0]; // "2025-05-20"
-      const sanitizedName = clientName.replace(/\s+/g, "-").replace(/[\\/:*?"<>|]/g, "-");
-      const fileName = `${orderDate}-${sanitizedName}.png`;
       link.download = fileName;
       link.click();
     } catch (err) {
@@ -74,6 +85,7 @@ const OrderHistoryClient = () => {
       alert("이미지 저장 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
     }
   };
+
 
   // 선택된 주문 ID가 바뀔 때마다 상세 내역 호출
   useEffect(() => {
