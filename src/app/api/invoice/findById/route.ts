@@ -25,7 +25,7 @@ export async function GET(req: Request) {
           select: {name: true, phone: true},
         },
         details: {
-          select: {name: true, quantity: true, price: true},
+          select: {name: true, spec: true, quantity: true, price: true},
         },
       },
     });

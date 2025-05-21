@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-   output   = "./node_modules/@prisma/client"
 }
 
 datasource db {
@@ -51,6 +50,7 @@ model InvoiceDetail {
   invoice    Invoice  @relation(fields: [invoiceId], references: [id])
   invoiceId  Int                                       // FK (Foreign Key)
   name       String   @db.VarChar(255)                 // 품명
+  spec       String?  @db.VarChar(255)                 // 규격
   quantity   Int      @default(1)                      // 수량 (기본값 1)
   price      Int      @default(0)                      // 단가 (원화 기준 정수)
 }
