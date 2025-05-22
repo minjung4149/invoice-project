@@ -32,6 +32,7 @@ export async function POST(req: Request) {
           data: details.map((detail) => ({
             invoiceId: invoice.id,
             name: detail.name,
+            spec: detail.spec ?? null,
             quantity: detail.quantity ?? 1,
             price: detail.price ?? 0,
           })),
