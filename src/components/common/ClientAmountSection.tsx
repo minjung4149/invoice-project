@@ -54,6 +54,7 @@ const ClientAmountSection = ({data, total, label, months}: Props) => {
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
+    window.location.reload();
   };
 
   return (

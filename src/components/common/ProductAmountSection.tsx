@@ -15,7 +15,7 @@ interface ProductSalesProps {
   label: string;
 }
 
-const ProductAmountSection = ({data, months,label}: ProductSalesProps) => {
+const ProductAmountSection = ({data, months, label}: ProductSalesProps) => {
   const printRef = useRef<HTMLDivElement>(null);
   const [selectedMonth, setSelectedMonth] = useState<string | undefined>(undefined);
 
@@ -48,6 +48,7 @@ const ProductAmountSection = ({data, months,label}: ProductSalesProps) => {
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
+    window.location.reload();
   };
 
   return (
