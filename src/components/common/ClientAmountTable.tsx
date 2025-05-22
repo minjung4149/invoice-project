@@ -6,7 +6,7 @@ import {formatPhone} from "@/utils/format";
 interface ClientRow {
   clientId: number;
   name: string;
-  phone: string;
+  phone?: string;
   latestInvoiceDate: string;
   amount: number; // 잔금 or 매출 공통으로 사용
 }
@@ -32,32 +32,30 @@ const ClientAmountTable = ({data, amountLabel}: AmountTableProps) => {
     .sort((a, b) => b.amount - a.amount);
 
   return (
-    <div className="amount-list">
-      <div className="table-container">
-        {/* 테이블 */}
-        <table className="amount-table">
-          <thead>
-          <tr>
-            <th>No</th>
-            <th>최근 거래 날짜</th>
-            <th>거래처 명</th>
-            <th>연락처</th>
-            <th>{amountLabel}</th>
+    <div className="table-container">
+      {/* 테이블 */}
+      <table className="amount-table">
+        <thead>
+        <tr>
+          <th>No</th>
+          <th>최근 거래 날짜</th>
+          <th>거래처 명</th>
+          <th>연락처</th>
+          <th>{amountLabel}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {filteredSorted.map(({clientId, name, phone, latestInvoiceDate, amount}, index) => (
+          <tr key={clientId}>
+            <td className="id">{index + 1}</td>
+            <td className="date">{formatDate(latestInvoiceDate)}</td>
+            <td className="store">{name}</td>
+            <td className="contact">{phone ? formatPhone(phone) : ''}</td>
+            <td>{amount.toLocaleString()} 원</td>
           </tr>
-          </thead>
-          <tbody>
-          {filteredSorted.map(({clientId, name, phone, latestInvoiceDate, amount}, index) => (
-            <tr key={clientId}>
-              <td className="id">{index + 1}</td>
-              <td className="date">{formatDate(latestInvoiceDate)}</td>
-              <td className="store">{name}</td>
-              <td className="contact">{formatPhone(phone)}</td>
-              <td>{amount.toLocaleString()} 원</td>
-            </tr>
-          ))}
-          </tbody>
-        </table>
-      </div>
+        ))}
+        </tbody>
+      </table>
     </div>
   );
 };

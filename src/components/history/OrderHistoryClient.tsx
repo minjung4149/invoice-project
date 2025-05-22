@@ -157,7 +157,7 @@ const OrderHistoryClient = () => {
       </main>
 
       {/* 인쇄 영역 */}
-      <div className="print-only">
+      <div className="print-only invoice-print">
         <div id="print-area">
           <div style={{display: "flex", flexDirection: "row", gap: 0, width: "210mm"}}>
             <div className="print-half">{printable}</div>
@@ -165,6 +165,8 @@ const OrderHistoryClient = () => {
           </div>
         </div>
       </div>
+
+      {/* 이미지 다운로드 영역 */}
       <div
         className="invoice-download-style"
         style={{

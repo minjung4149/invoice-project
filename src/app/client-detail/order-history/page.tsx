@@ -1,6 +1,7 @@
 import {Suspense} from 'react';
 import OrderHistoryClient from "@/components/history/OrderHistoryClient";
 
+
 // dynamic rendering을 강제로 활성화 (SSR이 항상 실행되도록 설정)
 export const dynamic = 'force-dynamic';
 

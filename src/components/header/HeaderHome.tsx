@@ -3,7 +3,7 @@ import React from 'react';
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHouse} from "@fortawesome/free-solid-svg-icons";
+import {faCoins, faHouse, faWallet, faWonSign} from "@fortawesome/free-solid-svg-icons";
 
 /**
  * HeaderHome 컴포넌트
@@ -35,9 +35,21 @@ const HeaderHome = () => {
         <div className="header_wrapper">
           <h1>{title}</h1>
           <div className="btn-area">
-            <Link href="/main" className="default">
+            <Link href="/main" className="primary default">
               <FontAwesomeIcon icon={faHouse} className="icon"/>
               홈으로
+            </Link>
+            <Link href="/balance" className="default">
+              <FontAwesomeIcon icon={faWonSign} className="icon"/>
+              잔금 확인
+            </Link>
+            <Link href="/sales" className="default">
+              <FontAwesomeIcon icon={faWallet} className="icon"/>
+              매출 현황
+            </Link>
+            <Link href="/" className="default">
+              <FontAwesomeIcon icon={faCoins} className="icon"/>
+              판매 현황
             </Link>
           </div>
         </div>

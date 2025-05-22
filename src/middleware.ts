@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
 
   const pathname = decodeURIComponent(req.nextUrl.pathname);
 
-  const protectedPaths = ["/main", "/client-detail", "/balance"]; // 보호할 페이지 목록
+  const protectedPaths = ["/main", "/client-detail", "/balance", "sales"]; // 보호할 페이지 목록
 
   if (protectedPaths.some(path => pathname.startsWith(path)) && !isLoggedIn) {
     return NextResponse.redirect(new URL("/", req.url));
@@ -25,5 +25,7 @@ export const config = {
     "/client-detail/:path*",
     "/balance",
     "/balance/:path*",
+    "/sales",
+    "/sales/:path*",
   ],
 };

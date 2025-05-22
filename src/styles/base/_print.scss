@@ -5,10 +5,10 @@
 ---------------------- */
 
 @media print {
-  @page {
-    size: A4 landscape;
-    margin: 1mm;
-  }
+  //@page {
+  //  size: A4 landscape;
+  //  margin: 1mm;
+  //}
 
   body, html {
     margin: 0;
@@ -34,42 +34,50 @@
   table {
     width: 100% !important;
     border-collapse: collapse !important;
-    font-size: 12px !important;
     margin: 0 !important;
   }
 
   table th,
   table td {
-    font-size: 12px !important;
-    padding: 3px !important;
+    font-size: 14px !important;
+    padding: 6px !important;
     text-align: center !important;
     word-break: break-word !important;
     white-space: normal !important;
   }
-  table th:first-child,
-  table td:first-child {
-    min-width: 30px !important;
-    width: 30px !important;
-    text-align: center;
-    white-space: nowrap;
-  }
 
-  .print-half {
-    flex: none !important;
-    width: 148mm !important;
-    max-width: 148mm !important;
-    padding: 1mm !important;
-    box-sizing: border-box !important;
-    font-size: 12px !important;
-    line-height: 1 !important;
-    overflow: hidden !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
+  .invoice-print {
+    table th,
+    table td {
+      font-size: 12px !important;
+      padding: 3px !important;
+    }
 
-  .print-half > *:first-child {
-    margin-top: 0 !important;
-    padding-top: 2mm !important;
+    table th:first-child,
+    table td:first-child {
+      min-width: 30px !important;
+      width: 30px !important;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .print-half {
+      flex: none !important;
+      width: 148mm !important;
+      max-width: 148mm !important;
+      padding: 1mm !important;
+      box-sizing: border-box !important;
+      font-size: 12px !important;
+      line-height: 1 !important;
+      overflow: hidden !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    .print-half > *:first-child {
+      margin-top: 0 !important;
+      padding-top: 2mm !important;
+    }
   }
 
   .invoice {

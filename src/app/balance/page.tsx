@@ -1,8 +1,7 @@
 import React from 'react';
-import ClientAmountTable from "@/components/common/ClientAmountTable";
 import HeaderHome from "@/components/header/HeaderHome";
-import AmountSummary from "@/components/common/AmountSummary";
 import {getClientBalance} from "@/utils/api";
+import ClientAmountSection from "@/components/common/ClientAmountSection";
 
 // 서버 응답 타입
 interface ClientBalance {
@@ -56,21 +55,12 @@ const BalancePage = async () => {
       <HeaderHome/>
       <main className="site-content">
         <div className="container">
-          <div className="main-wrapper">
-            <div className="amount-wrapper">
-              {/* 거래처별 잔금 리스트 테이블 */}
-              <ClientAmountTable
-                data={tableData}
-                amountLabel="잔금"
-              />
-
-              {/* 전체 잔금 합계 요약 컴포넌트 */}
-              <AmountSummary
-                total={total}
-                label="잔금 합계"
-              />
-            </div>
-          </div>
+          <ClientAmountSection
+            data={tableData}
+            total={total}
+            label="잔금"
+            months={[]}
+          />
         </div>
       </main>
     </>

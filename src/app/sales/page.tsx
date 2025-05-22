@@ -1,18 +1,17 @@
 import React from 'react';
 import HeaderHome from "@/components/header/HeaderHome";
-import ClientAmountTable from "@/components/common/ClientAmountTable";
-import AmountSummary from "@/components/common/AmountSummary";
+import ClientAmountSection from "@/components/common/ClientAmountSection";
 
 // 거래처 매출 정보 타입
 interface MonthlySales {
   clientId: number;
   name: string;
-  phone: string;
+  phone?: string;
   sales: number;
   latestInvoiceDate: string;
 }
 
-// 가데이터 (2025년 5월 기준)
+// // 가데이터 (2025년 5월 기준)
 const dummySalesData: MonthlySales[] = [
   {
     clientId: 1,
@@ -37,11 +36,9 @@ const dummySalesData: MonthlySales[] = [
   },
 ];
 
-// 월 선택용 드롭다운 옵션
 const availableMonths = ["2025-05", "2025-04", "2025-03"];
 
 const MonthlySalesPage = async () => {
-  // amount 필드로 변환 (공통 테이블 대응)
   const tableData = dummySalesData.map((item) => ({
     clientId: item.clientId,
     name: item.name,
@@ -50,7 +47,6 @@ const MonthlySalesPage = async () => {
     amount: item.sales,
   }));
 
-  // 총 매출 합계 계산
   const totalSales = tableData.reduce((sum, item) => sum + item.amount, 0);
 
   return (
@@ -58,24 +54,12 @@ const MonthlySalesPage = async () => {
       <HeaderHome/>
       <main className="site-content">
         <div className="container">
-          <div className="main-wrapper">
-            <div className="amount-wrapper">
-              {/* 매출 리스트 테이블 */}
-              <ClientAmountTable
-                data={tableData}
-                amountLabel="매출"
-              />
-
-              {/* 매출 요약 + 월 선택 */}
-
-              <AmountSummary
-                total={20176000}
-                label="매출"
-                months={["2025-05", "2025-04", "2025-03"]}
-              />
-
-            </div>
-          </div>
+          <ClientAmountSection
+            data={tableData}
+            label="매출"
+            total={totalSales}
+            months={availableMonths}
+          />
         </div>
       </main>
     </>
