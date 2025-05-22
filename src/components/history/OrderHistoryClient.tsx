@@ -10,6 +10,7 @@ import {toPng} from "html-to-image";
 interface Item {
   id: number;
   name: string;
+  spec?: string;
   quantity: number;
   price: number;
   total: number;
@@ -99,7 +100,8 @@ const OrderHistoryClient = () => {
         const items: Item[] = (raw.details as Array<{
           name: string;
           quantity: number;
-          price: number
+          price: number;
+          spec?: string;
         }>).map((item, idx) => {
           const total = item.price * item.quantity;
           return {
@@ -107,6 +109,7 @@ const OrderHistoryClient = () => {
             name: item.name,
             quantity: item.quantity,
             price: item.price,
+            spec: item.spec ?? "",
             total,
           };
         });

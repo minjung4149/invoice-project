@@ -43,10 +43,12 @@ interface HistoryTemplateProps {
  * - 품목 테이블 + 요약 정보(소계, 전잔금, 입금, 잔금, 비고) 제공
  */
 const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
-  function HistoryTemplate({ selectedOrder, invoiceDetail }, ref) {
+  function HistoryTemplate({selectedOrder, invoiceDetail}, ref) {
 
     const searchParams = useSearchParams(); // URL 파라미터 접근
     const clientName = searchParams.get("name") || ""; // 클라이언트 이름
+
+    console.log('invoiceDetail', invoiceDetail)
 
     return (
       <div className="invoice" ref={ref}>
