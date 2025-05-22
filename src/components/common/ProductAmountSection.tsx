@@ -1,25 +1,22 @@
 "use client";
 import React, {useRef, useState, useEffect} from "react";
-import ClientAmountTable from "@/components/common/ClientAmountTable";
+import ProductAmountTable from "@/components/common/ProductAmountTable";
 import AmountSummary from "@/components/common/AmountSummary";
 
-interface Props {
+interface ProductSalesProps {
   data: {
-    clientId: number;
+    itemId: number;
     name: string;
-    phone?: string;
-    latestInvoiceDate: string;
+    spec: string;
+    quantity: number;
     amount: number;
   }[];
-  total: number;
-  label: string;
   months: string[];
+  label: string;
 }
 
-const ClientAmountSection = ({data, total, label, months}: Props) => {
+const ProductAmountSection = ({data, months,label}: ProductSalesProps) => {
   const printRef = useRef<HTMLDivElement>(null);
-
-  // 선택된 월 상태는 상위에서 관리 (기본값: 첫 번째 월 또는 undefined)
   const [selectedMonth, setSelectedMonth] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -27,7 +24,6 @@ const ClientAmountSection = ({data, total, label, months}: Props) => {
       setSelectedMonth(months[0]);
     }
   }, [months]);
-  ;
 
   const handleMonthChange = (month: string) => {
     setSelectedMonth(month);
@@ -44,10 +40,8 @@ const ClientAmountSection = ({data, total, label, months}: Props) => {
   const dynamicLabel =
     months && selectedMonth ? `${formatMonthOnly(selectedMonth)} ${label}` : label;
 
-
   const handlePrint = () => {
     if (!printRef.current) return;
-
     const printContents = printRef.current.innerHTML;
     const originalContents = document.body.innerHTML;
 
@@ -57,25 +51,20 @@ const ClientAmountSection = ({data, total, label, months}: Props) => {
   };
 
   return (
-    <>
-      <div className="main-wrapper">
-        <div className="amount-wrapper">
-          <div ref={printRef} className="amount-list">
-            <ClientAmountTable data={data} amountLabel={dynamicLabel}/>
-          </div>
-
-          <AmountSummary
-            total={total}
-            label={label}
-            months={months}
-            onPrintClick={handlePrint}
-            onMonthChange={handleMonthChange}
-          />
+    <div className="main-wrapper">
+      <div className="amount-wrapper">
+        <div ref={printRef} className="amount-list">
+          <ProductAmountTable data={data} amountLabel={dynamicLabel}/>
         </div>
+        <AmountSummary
+          months={months}
+          onPrintClick={handlePrint}
+          onMonthChange={handleMonthChange}
+          showSummaryContent={false}
+        />
       </div>
-    </>
-
+    </div>
   );
 };
 
-export default ClientAmountSection;
+export default ProductAmountSection;

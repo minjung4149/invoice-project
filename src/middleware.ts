@@ -25,7 +25,9 @@ export const config = {
     "/client-detail/:path*",
     "/balance",
     "/balance/:path*",
-    "/sales",
-    "/sales/:path*",
+    "/sales-monthly",
+    "/sales-monthly/:path*",
+    "/client-monthly",
+    "/client-monthly/:path*",
   ],
 };

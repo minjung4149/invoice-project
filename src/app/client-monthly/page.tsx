@@ -17,7 +17,7 @@ const dummySalesData: MonthlySales[] = [
     clientId: 1,
     name: "테스트 상회",
     phone: "01012345678",
-    sales: 10446000,
+    sales: 104460000,
     latestInvoiceDate: "2025-05-20T15:00:00",
   },
   {
@@ -38,7 +38,7 @@ const dummySalesData: MonthlySales[] = [
 
 const availableMonths = ["2025-05", "2025-04", "2025-03"];
 
-const MonthlySalesPage = async () => {
+const ClientMonthlyPage = async () => {
   const tableData = dummySalesData.map((item) => ({
     clientId: item.clientId,
     name: item.name,
@@ -66,4 +66,4 @@ const MonthlySalesPage = async () => {
   );
 };
 
-export default MonthlySalesPage;
+export default ClientMonthlyPage;

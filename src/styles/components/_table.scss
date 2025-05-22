@@ -100,7 +100,7 @@ table {
     padding: 14px 18px;
     font-weight: 500;
 
-    &.id {
+    &.id, &.itemId {
       width: 50px;
     }
 
@@ -109,7 +109,7 @@ table {
     }
 
     &.store {
-      width: 25%;
+      width: 26%;
     }
 
     &.contact {
@@ -123,6 +123,22 @@ table {
         color: #d9534f;
         font-weight: bold;
       }
+    }
+
+    &.name {
+      width: 25%;
+    }
+
+    &.spec {
+      width: 17%;
+    }
+
+    &.quantity {
+      width: 20%;
+    }
+
+    &.amount {
+      width: 30%;
     }
   }
 }

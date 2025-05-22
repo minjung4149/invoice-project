@@ -53,11 +53,11 @@ const Header = ({onClientRegistered}: { onClientRegistered: () => void }) => {
               <FontAwesomeIcon icon={faWonSign} className="icon"/>
               잔금 확인
             </Link>
-            <Link href="/sales" className="default">
+            <Link href="/client-monthly" className="default">
               <FontAwesomeIcon icon={faWallet} className="icon"/>
               매출 현황
             </Link>
-            <Link href="/" className="default">
+            <Link href="/sales-monthly" className="default">
               <FontAwesomeIcon icon={faCoins} className="icon"/>
               판매 현황
             </Link>

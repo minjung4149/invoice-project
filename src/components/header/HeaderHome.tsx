@@ -18,7 +18,8 @@ const HeaderHome = () => {
   // 경로별 타이틀 매핑
   const titleMap: { [key: string]: string } = {
     "/balance": "거래처 잔금 현황",
-    "/sales": "한달 기준 매출 현황",
+    "/sales-monthly": "한달 기준 판매 현황",
+    "/client-monthly": "한달 기준 매출 현황",
   };
 
   // 가장 먼저 일치하는 경로 키 찾기
@@ -43,11 +44,11 @@ const HeaderHome = () => {
               <FontAwesomeIcon icon={faWonSign} className="icon"/>
               잔금 확인
             </Link>
-            <Link href="/sales" className="default">
+            <Link href="/client-monthly" className="default">
               <FontAwesomeIcon icon={faWallet} className="icon"/>
               매출 현황
             </Link>
-            <Link href="/" className="default">
+            <Link href="/sales-monthly" className="default">
               <FontAwesomeIcon icon={faCoins} className="icon"/>
               판매 현황
             </Link>

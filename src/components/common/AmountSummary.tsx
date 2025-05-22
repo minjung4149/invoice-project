@@ -2,14 +2,15 @@
 import React, {useState} from "react";
 
 interface AmountSummaryProps {
-  total: number;
+  total?: number;
   label?: string;
   months?: string[];
   onPrintClick?: () => void;
   onMonthChange?: (month: string) => void;
+  showSummaryContent?: boolean;
 }
 
-const AmountSummary = ({total, label, months, onPrintClick, onMonthChange}: AmountSummaryProps) => {
+const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showSummaryContent}: AmountSummaryProps) => {
   const [selectedMonth, setSelectedMonth] = useState(
     months && months.length > 0 ? months[0] : ""
   );
@@ -60,10 +61,12 @@ const AmountSummary = ({total, label, months, onPrintClick, onMonthChange}: Amou
         )}
       </div>
 
-      <div className="summary-content">
-        <p className="summary-label">{labelText}</p>
-        <p className="summary-amount">{total.toLocaleString()} 원</p>
-      </div>
+      {showSummaryContent !== false && ( // 기본값은 true
+        <div className="summary-content">
+          <p className="summary-label">{labelText}</p>
+          <p className="summary-amount">{total?.toLocaleString()} 원</p>
+        </div>
+      )}
     </div>
   );
 };
