@@ -158,6 +158,48 @@ export const getClientBalance = async () => {
   }
 };
 
+// api/remain 의 api 호출 함수
+// 거래처 잔금 확인용 api
+// 월별 매출 현황을 가져오는 api
+// 예시 결과 데이터 : {baseUrl}/api/sales?month=2025-04
+//{
+// "clients": [
+// {
+// "clientId": 3,
+// "name": "test",
+// "phone": "",
+// "latestDate": "2025-04-24T03:10:27.904Z",
+// "totalSales": "1500"
+// },
+// {
+// "clientId": 1,
+// "name": "테스트222",
+// "phone": "01001010",
+// "latestDate": "2025-04-10T06:27:24.211Z",
+// "totalSales": "46500"
+// }
+// ]
+// }
+export const getClientSales = async (month: string) => {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      throw new Error("환경변수 NEXT_PUBLIC_BASE_URL이 설정되지 않았습니다.");
+    }
+
+    const response = await fetch(`${baseUrl}/api/sales?month=${month}`, {cache: "no-store"});
+
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+    const result = await response.json();
+
+    return result.clients;
+  } catch (error) {
+    console.error("Failed to fetch latest invoices for all clients:", error);
+    throw error;
+  }
+};
+
 
 // Invoice API
 // 거래 내역 보기에서 리스트 클릭시 해당 거래 내역을 호출하는 api
