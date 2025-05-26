@@ -1,53 +1,37 @@
 import React from 'react';
 import HeaderHome from "@/components/header/HeaderHome";
 import ClientAmountSection from "@/components/common/ClientAmountSection";
+import {getClientSales} from "@/utils/api";
 
-// 거래처 매출 정보 타입
-interface MonthlySales {
-  clientId: number;
-  name: string;
-  phone?: string;
-  sales: number;
-  latestInvoiceDate: string;
-}
 
-// // 가데이터 (2025년 5월 기준)
-const dummySalesData: MonthlySales[] = [
-  {
-    clientId: 1,
-    name: "테스트 상회",
-    phone: "01012345678",
-    sales: 104460000,
-    latestInvoiceDate: "2025-05-20T15:00:00",
-  },
-  {
-    clientId: 2,
-    name: "한솔상사",
-    phone: "01098765432",
-    sales: 8480000,
-    latestInvoiceDate: "2025-05-18T10:30:00",
-  },
-  {
-    clientId: 3,
-    name: "나이스마트",
-    phone: "01055556666",
-    sales: 1250000,
-    latestInvoiceDate: "2025-05-14T11:20:00",
-  },
-];
-
-const availableMonths = ["2025-05", "2025-04", "2025-03"];
+// 오늘 날짜 기준으로 YYYY-MM 문자열 생성
+const getTodayMonth = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+};
 
 const ClientMonthlyPage = async () => {
-  const tableData = dummySalesData.map((item) => ({
+  const currentMonth = getTodayMonth();
+  console.log("현재 월:", currentMonth);
+  let clients = [];
+  try {
+    clients = await getClientSales(currentMonth);
+    console.log("초기 매출 데이터:", clients);
+  } catch (error) {
+    console.error("초기 매출 데이터 불러오기 실패:", error);
+  }
+
+  const tableData = clients.map((item: any) => ({
     clientId: item.clientId,
     name: item.name,
     phone: item.phone,
-    latestInvoiceDate: item.latestInvoiceDate,
-    amount: item.sales,
+    latestInvoiceDate: item.latestDate,
+    amount: item.totalSales,
   }));
 
-  const totalSales = tableData.reduce((sum, item) => sum + item.amount, 0);
+  const totalSales = tableData.reduce((sum: number, item: any) => sum + item.amount, 0);
 
   return (
     <>
@@ -58,7 +42,7 @@ const ClientMonthlyPage = async () => {
             data={tableData}
             label="매출"
             total={totalSales}
-            months={availableMonths}
+            months={[currentMonth]}
           />
         </div>
       </main>

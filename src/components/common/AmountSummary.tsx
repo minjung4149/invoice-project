@@ -23,7 +23,8 @@ const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showS
     }
   };
 
-  const formatMonthForSelect = (month: string) => {
+  const formatMonthForSelect = (month?: string) => {
+    if (!month || !month.includes("-")) return "";
     const [year, m] = month.split("-");
     return `${year}년 ${parseInt(m, 10)}월`;
   };
@@ -47,11 +48,13 @@ const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showS
             value={selectedMonth}
             onChange={handleChange}
           >
-            {months.map((month) => (
-              <option key={month} value={month}>
-                {formatMonthForSelect(month)}
-              </option>
-            ))}
+            {[...new Set(months)]
+              .filter((m): m is string => typeof m === "string" && m.includes("-"))
+              .map((month) => (
+                <option key={month} value={month}>
+                  {formatMonthForSelect(month)}
+                </option>
+              ))}
           </select>
         )}
         {onPrintClick && (

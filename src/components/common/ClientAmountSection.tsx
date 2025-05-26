@@ -2,8 +2,9 @@
 import React, {useRef, useState, useEffect} from "react";
 import ClientAmountTable from "@/components/common/ClientAmountTable";
 import AmountSummary from "@/components/common/AmountSummary";
+import {getClientSales} from "@/utils/api";
 
-interface Props {
+interface ClientAmountProps {
   data: {
     clientId: number;
     name: string;
@@ -16,33 +17,54 @@ interface Props {
   months: string[];
 }
 
-const ClientAmountSection = ({data, total, label, months}: Props) => {
+const ClientAmountSection = ({data, total, label, months}: ClientAmountProps) => {
   const printRef = useRef<HTMLDivElement>(null);
-
-  // 선택된 월 상태는 상위에서 관리 (기본값: 첫 번째 월 또는 undefined)
-  const [selectedMonth, setSelectedMonth] = useState<string | undefined>(undefined);
+  const [selectedMonth, setSelectedMonth] = useState(months[0]);
+  const [clientData, setClientData] = useState(data);
+  const [totalAmount, setTotalAmount] = useState(total);
+  const [availableMonths, setAvailableMonths] = useState<string[]>(months);
 
   useEffect(() => {
-    if (months && months.length > 0) {
-      setSelectedMonth(months[0]);
+    if (!availableMonths.includes(selectedMonth)) {
+      setAvailableMonths((prev) => [...prev, selectedMonth]);
     }
-  }, [months]);
-  ;
+  }, [selectedMonth, availableMonths]);
 
-  const handleMonthChange = (month: string) => {
+
+  const handleMonthChange = async (month: string) => {
     setSelectedMonth(month);
+
+    try {
+      const res = await getClientSales(month);
+      const newData = res.map((item: any) => ({
+        clientId: item.clientId,
+        name: item.name,
+        phone: item.phone,
+        latestInvoiceDate: item.latestDate,
+        amount: item.totalSales,
+      }));
+
+      const sum = newData.reduce((acc: number, cur: any) => acc + Number(cur.amount), 0);
+
+      setClientData(newData);
+      setTotalAmount(sum);
+
+      // 월 목록에 없으면 추가
+      if (!availableMonths.includes(month)) {
+        setAvailableMonths((prev) => [...prev, month]);
+      }
+    } catch (e) {
+      console.error("월별 매출 데이터 불러오기 실패:", e);
+    }
   };
 
-  // "2025-05" -> "5월"
   const formatMonthOnly = (month?: string) => {
     if (!month) return "";
     const [, m] = month.split("-");
     return `${parseInt(m, 10)}월`;
   };
 
-  // 동적 라벨 조합 (월 존재 시만)
-  const dynamicLabel =
-    months && selectedMonth ? `${formatMonthOnly(selectedMonth)} ${label}` : label;
+  const dynamicLabel = selectedMonth ? `${formatMonthOnly(selectedMonth)} ${label}` : label;
 
 
   const handlePrint = () => {
@@ -62,13 +84,13 @@ const ClientAmountSection = ({data, total, label, months}: Props) => {
       <div className="main-wrapper">
         <div className="amount-wrapper">
           <div ref={printRef} className="amount-list">
-            <ClientAmountTable data={data} amountLabel={dynamicLabel}/>
+            <ClientAmountTable data={clientData} amountLabel={dynamicLabel}/>
           </div>
 
           <AmountSummary
-            total={total}
+            total={totalAmount}
             label={label}
-            months={months}
+            months={availableMonths}
             onPrintClick={handlePrint}
             onMonthChange={handleMonthChange}
           />
