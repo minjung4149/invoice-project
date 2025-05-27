@@ -291,26 +291,26 @@ export const updateInvoice = async (invoiceData: InvoiceRequest & { id: number }
 // {
 // "name": "딸기",
 // "spec": "c",
-// "total_quantity": 6,
-// "total_revenue": 63000
+// "quantity": 6,
+// "amount": 63000
 // },
 // {
 // "name": "복숭아",
 // "spec": "a",
-// "total_quantity": 2,
-// "total_revenue": 6000
+// "quantity": 2,
+// "amount": 6000
 // },
 // {
 // "name": "복숭아",
 // "spec": "b",
-// "total_quantity": 1,
-// "total_revenue": 500
+// "quantity": 1,
+// "amount": 500
 // },
 // {
 // "name": "복숭아",
 // "spec": "e",
-// "total_quantity": 1,
-// "total_revenue": 500
+// "quantity": 1,
+// "amount": 500
 // }
 // ]
 export const getGoodsSales = async (month: string) => {

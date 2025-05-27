@@ -34,8 +34,8 @@ export async function GET(req: NextRequest) {
     const response = results.map((item) => ({
       name: item.name,
       spec: item.spec,
-      total_quantity: item._sum.quantity ?? 0,
-      total_revenue: (item._sum.quantity ?? 0) * (item._sum.price ?? 0),
+      quantity: item._sum.quantity ?? 0,
+      amount: (item._sum.quantity ?? 0) * (item._sum.price ?? 0),
     }));
 
     return NextResponse.json(response);
