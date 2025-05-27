@@ -313,7 +313,7 @@ export const updateInvoice = async (invoiceData: InvoiceRequest & { id: number }
 // "amount": 500
 // }
 // ]
-export const getGoodsSales = async (month: string) => {
+export const getMonthlySales = async (month: string) => {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     if (!baseUrl) {
