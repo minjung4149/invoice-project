@@ -31,7 +31,10 @@ const ClientMonthlyPage = async () => {
     amount: item.totalSales,
   }));
 
-  const totalSales = tableData.reduce((sum: number, item: any) => sum + item.amount, 0);
+  const totalSales = tableData.reduce((sum: number, item: any) => {
+    return sum + Number(item.totalSales);
+  }, 0);
+  console.log("총 매출:", totalSales);
 
   return (
     <>
