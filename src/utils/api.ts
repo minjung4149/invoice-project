@@ -187,7 +187,7 @@ export const getClientSales = async (month: string) => {
       throw new Error("환경변수 NEXT_PUBLIC_BASE_URL이 설정되지 않았습니다.");
     }
 
-    const response = await fetch(`${baseUrl}/api/sales?month=${month}`, {cache: "no-store"});
+    const response = await fetch(`${baseUrl}/api/sales/client?month=${month}`, {cache: "no-store"});
 
     if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
@@ -280,6 +280,59 @@ export const updateInvoice = async (invoiceData: InvoiceRequest & { id: number }
     return await response.json();
   } catch (error) {
     console.error('Failed to update invoice:', error);
+    throw error;
+  }
+};
+
+
+// 월별 품목별 판매 현황을 가져오는 API
+// 예시 결과 데이터: {baseUrl}/api/sales/monthly?month=2025-04
+// [
+// {
+// "name": "딸기",
+// "spec": "c",
+// "quantity": 6,
+// "amount": 63000
+// },
+// {
+// "name": "복숭아",
+// "spec": "a",
+// "quantity": 2,
+// "amount": 6000
+// },
+// {
+// "name": "복숭아",
+// "spec": "b",
+// "quantity": 1,
+// "amount": 500
+// },
+// {
+// "name": "복숭아",
+// "spec": "e",
+// "quantity": 1,
+// "amount": 500
+// }
+// ]
+export const getMonthlySales = async (month: string) => {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      throw new Error('환경변수 NEXT_PUBLIC_BASE_URL이 설정되지 않았습니다.');
+    }
+
+    const response = await fetch(`${baseUrl}/api/sales/monthly?month=${month}`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error(`API 요청 실패: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+
+    return result; // [{ name, spec, total_quantity, total_revenue }, ...]
+  } catch (error) {
+    console.error('월별 인보이스 요약 조회 실패:', error);
     throw error;
   }
 };
