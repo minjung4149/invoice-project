@@ -4,6 +4,22 @@ import ClientAmountTable from "@/components/common/ClientAmountTable";
 import AmountSummary from "@/components/common/AmountSummary";
 import {getClientSales} from "@/utils/api";
 
+interface ClientSales {
+  clientId: number;
+  name: string;
+  phone?: string;
+  latestDate: string;
+  totalSales: number | string;
+}
+
+interface ClientRow {
+  clientId: number;
+  name: string;
+  phone?: string;
+  latestDate: string;
+  amount: number;
+}
+
 interface ClientAmountProps {
   data: {
     clientId: number;
@@ -36,7 +52,7 @@ const ClientAmountSection = ({data, initTotalAmount, label, months}: ClientAmoun
 
     try {
       const res = await getClientSales(month);
-      const newData = res.map((item: any) => ({
+      const newData = res.map((item: ClientSales) => ({
         clientId: item.clientId,
         name: item.name,
         phone: item.phone,
@@ -44,7 +60,7 @@ const ClientAmountSection = ({data, initTotalAmount, label, months}: ClientAmoun
         amount: Number(item.totalSales),
       }));
 
-      const newDataTotalAmount = newData.reduce((acc: number, cur: any) => acc + Number(cur.amount), 0);
+      const newDataTotalAmount = newData.reduce((acc: number, cur: ClientRow) => acc + Number(cur.amount), 0);
 
       setClientData(newData);
       setTotalAmount(newDataTotalAmount);
