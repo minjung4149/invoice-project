@@ -28,6 +28,7 @@ const MainClient = () => {
   const fetchClients = async () => {
     try {
       const clientList = await getClientList();
+      console.log("클라이언트 목록:", clients);
 
       setClients(
         [...clientList].sort((a, b) =>

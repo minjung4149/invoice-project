@@ -4,11 +4,11 @@ import {prisma} from '@/lib/prisma';
 
 // GET 요청 - 모든 Client의 최신 Invoice 정보 조회
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+  const {searchParams} = new URL(request.url);
   const targetMonth = searchParams.get('month'); // 예: "2025-05"
 
   if (!targetMonth || !/^\d{4}-\d{2}$/.test(targetMonth)) {
-    return NextResponse.json({ error: 'Invalid or missing month format. Use YYYY-MM.' }, { status: 400 });
+    return NextResponse.json({error: 'Invalid or missing month format. Use YYYY-MM.'}, {status: 400});
   }
 
   try {
@@ -27,6 +27,8 @@ export async function GET(request: Request) {
       },
     });
 
+    console.log(clients);
+
     // 결과 데이터 변환 (각 Client에 대해 최신 Invoice 데이터 추출 및 invoiceDate desc 정렬)
     const result = await prisma.$queryRaw<
       {
@@ -37,18 +39,17 @@ export async function GET(request: Request) {
         totalSales: number;
       }[]
     >`
-      SELECT
-        c."id" as "clientId",
-        c."name",
-        c."phone",
-        MAX(i."createDate") as "latestDate",
-        SUM(d."quantity" * d."price") as "totalSales"
-      FROM "InvoiceDetail" d
-      JOIN "Invoice" i ON d."invoiceId" = i."id"
-      JOIN "Client" c ON i."clientId" = c."id"
-      WHERE TO_CHAR(i."createDate", 'YYYY-MM') = ${targetMonth}
-      GROUP BY c."id", c."name", c."phone"
-      ORDER BY "latestDate" DESC;
+        SELECT c."id"                        as "clientId",
+               c."name",
+               c."phone",
+               MAX(i."createDate")           as "latestDate",
+               SUM(d."quantity" * d."price") as "totalSales"
+        FROM "InvoiceDetail" d
+                 JOIN "Invoice" i ON d."invoiceId" = i."id"
+                 JOIN "Client" c ON i."clientId" = c."id"
+        WHERE TO_CHAR(i."createDate", 'YYYY-MM') = ${targetMonth}
+        GROUP BY c."id", c."name", c."phone"
+        ORDER BY "latestDate" DESC;
     `;
 
     const sanitizedResult = result.map(row => ({
