@@ -14,8 +14,6 @@ interface ProductAmountProps {
 }
 
 const ProductAmountTable = ({data, amountLabel}: ProductAmountProps) => {
-  const filteredSorted = data.sort((a, b) => b.quantity - a.quantity);
-
   return (
     <div className="table-container">
       <table className="amount-table">
@@ -29,7 +27,7 @@ const ProductAmountTable = ({data, amountLabel}: ProductAmountProps) => {
         </tr>
         </thead>
         <tbody>
-        {filteredSorted.map(({itemId, name, spec, quantity, amount}, index) => (
+        {data.map(({itemId, name, spec, quantity, amount}, index) => (
           <tr key={itemId ?? index}>
             <td className="itemId">{index + 1}</td>
             <td className="name">{name}</td>
