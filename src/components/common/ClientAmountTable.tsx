@@ -7,7 +7,7 @@ interface ClientRow {
   clientId: number;
   name: string;
   phone?: string;
-  latestInvoiceDate: string;
+  latestDate: string;
   amount: number; // 잔금 or 매출 공통으로 사용
 }
 
@@ -27,9 +27,7 @@ interface AmountTableProps {
  */
 
 const ClientAmountTable = ({data, amountLabel}: AmountTableProps) => {
-  const filteredSorted = data
-    .filter(client => client.amount > 0)
-    .sort((a, b) => b.amount - a.amount);
+  const sortedData = [...data].sort((a, b) => b.amount - a.amount);
 
   return (
     <div className="table-container">
@@ -45,10 +43,10 @@ const ClientAmountTable = ({data, amountLabel}: AmountTableProps) => {
         </tr>
         </thead>
         <tbody>
-        {filteredSorted.map(({clientId, name, phone, latestInvoiceDate, amount}, index) => (
+        {sortedData.map(({clientId, name, phone, latestDate, amount}, index) => (
           <tr key={clientId}>
             <td className="id">{index + 1}</td>
-            <td className="date">{formatDate(latestInvoiceDate)}</td>
+            <td className="date">{formatDate(latestDate)}</td>
             <td className="store">{name}</td>
             <td className="contact">{phone ? formatPhone(phone) : ''}</td>
             <td>{amount.toLocaleString()} 원</td>

@@ -9,19 +9,19 @@ interface ClientAmountProps {
     clientId: number;
     name: string;
     phone?: string;
-    latestInvoiceDate: string;
+    latestDate: string;
     amount: number;
   }[];
-  total: number;
+  initTotalAmount: number;
   label: string;
   months: string[];
 }
 
-const ClientAmountSection = ({data, total, label, months}: ClientAmountProps) => {
+const ClientAmountSection = ({data, initTotalAmount, label, months}: ClientAmountProps) => {
   const printRef = useRef<HTMLDivElement>(null);
   const [selectedMonth, setSelectedMonth] = useState(months[0]);
   const [clientData, setClientData] = useState(data);
-  const [totalAmount, setTotalAmount] = useState(total);
+  const [totalAmount, setTotalAmount] = useState(initTotalAmount);
   const [availableMonths, setAvailableMonths] = useState<string[]>(months);
 
   useEffect(() => {
@@ -40,14 +40,14 @@ const ClientAmountSection = ({data, total, label, months}: ClientAmountProps) =>
         clientId: item.clientId,
         name: item.name,
         phone: item.phone,
-        latestInvoiceDate: item.latestDate,
-        amount: item.totalSales,
+        latestDate: item.latestDate,
+        amount: Number(item.totalSales),
       }));
 
-      const sum = newData.reduce((acc: number, cur: any) => acc + Number(cur.amount), 0);
+      const newDataTotalAmount = newData.reduce((acc: number, cur: any) => acc + Number(cur.amount), 0);
 
       setClientData(newData);
-      setTotalAmount(sum);
+      setTotalAmount(newDataTotalAmount);
 
       // 월 목록에 없으면 추가
       if (!availableMonths.includes(month)) {

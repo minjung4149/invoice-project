@@ -42,7 +42,7 @@ const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showS
   return (
     <div className="amount-summary">
       <div className="summary-header">
-        {months && months.length > 0 && (
+        {Array.isArray(months) && months.filter(m => typeof m === "string" && m.includes("-")).length > 0 && (
           <select
             className="month-selector"
             value={selectedMonth}

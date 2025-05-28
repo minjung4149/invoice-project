@@ -27,14 +27,14 @@ const ClientMonthlyPage = async () => {
     clientId: item.clientId,
     name: item.name,
     phone: item.phone,
-    latestInvoiceDate: item.latestDate,
-    amount: item.totalSales,
+    latestDate: item.latestDate,
+    amount: Number(item.totalSales),
   }));
 
-  const totalSales = tableData.reduce((sum: number, item: any) => {
-    return sum + Number(item.totalSales);
+  const totalSalesSum = tableData.reduce((sum: number, item: any) => {
+    return sum + Number(item.amount);
   }, 0);
-  console.log("총 매출:", totalSales);
+  console.log("총 매출 합계:", totalSalesSum);
 
   return (
     <>
@@ -44,7 +44,7 @@ const ClientMonthlyPage = async () => {
           <ClientAmountSection
             data={tableData}
             label="매출"
-            total={totalSales}
+            initTotalAmount={totalSalesSum}
             months={[currentMonth]}
           />
         </div>
