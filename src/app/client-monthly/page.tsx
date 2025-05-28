@@ -2,6 +2,7 @@ import React from 'react';
 import HeaderHome from "@/components/header/HeaderHome";
 import ClientAmountSection from "@/components/common/ClientAmountSection";
 import {getClientSales} from "@/utils/api";
+import {getMonthsSince} from "@/utils/getMonthsSince";
 
 interface ClientSales {
   clientId: number;
@@ -9,14 +10,6 @@ interface ClientSales {
   phone?: string;
   latestDate: string;
   totalSales: number | string;
-}
-
-interface ClientRow {
-  clientId: number;
-  name: string;
-  phone?: string;
-  latestDate: string;
-  amount: number;
 }
 
 // 오늘 날짜 기준으로 YYYY-MM 문자열 생성
@@ -29,15 +22,17 @@ const getTodayMonth = (): string => {
 
 const ClientMonthlyPage = async () => {
   const currentMonth = getTodayMonth();
-  console.log("현재 월:", currentMonth);
-  let clients = [];
+  const months = getMonthsSince("2025-05"); // 누적 월 자동 생성
+
+  let clients: ClientSales[] = [];
+
   try {
     clients = await getClientSales(currentMonth);
   } catch (error) {
     console.error("초기 매출 데이터 불러오기 실패:", error);
   }
 
-  const tableData = clients.map((item: ClientSales) => ({
+  const tableData = clients.map((item) => ({
     clientId: item.clientId,
     name: item.name,
     phone: item.phone,
@@ -45,10 +40,8 @@ const ClientMonthlyPage = async () => {
     amount: Number(item.totalSales),
   }));
 
-  const totalSalesSum = tableData.reduce((sum: number, item: ClientRow) => {
-    return sum + Number(item.amount);
-  }, 0);
-  console.log("총 매출 합계:", totalSalesSum);
+  const totalSalesSum = tableData.reduce((sum, item) => sum + item.amount, 0);
+
 
   return (
     <>
@@ -59,7 +52,8 @@ const ClientMonthlyPage = async () => {
             data={tableData}
             label="매출"
             initTotalAmount={totalSalesSum}
-            months={[currentMonth]}
+            initialMonth={currentMonth}
+            months={months}
           />
         </div>
       </main>

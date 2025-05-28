@@ -21,22 +21,23 @@ interface ClientRow {
 }
 
 interface ClientAmountProps {
-  data: {
-    clientId: number;
-    name: string;
-    phone?: string;
-    latestDate: string;
-    amount: number;
-  }[];
+  data: ClientRow[];
   initTotalAmount: number;
   label: string;
   months: string[];
+  initialMonth?: string;
 }
 
-const ClientAmountSection = ({data, initTotalAmount, label, months}: ClientAmountProps) => {
+const ClientAmountSection = ({
+                               data,
+                               initTotalAmount,
+                               label,
+                               months,
+                               initialMonth,
+                             }: ClientAmountProps) => {
   const printRef = useRef<HTMLDivElement>(null);
-  const [selectedMonth, setSelectedMonth] = useState(months[0]);
-  const [clientData, setClientData] = useState(data);
+  const [selectedMonth, setSelectedMonth] = useState(initialMonth ?? "");
+  const [clientData, setClientData] = useState<ClientRow[]>(data);
   const [totalAmount, setTotalAmount] = useState(initTotalAmount);
   const [availableMonths, setAvailableMonths] = useState<string[]>(months);
 
@@ -60,10 +61,10 @@ const ClientAmountSection = ({data, initTotalAmount, label, months}: ClientAmoun
         amount: Number(item.totalSales),
       }));
 
-      const newDataTotalAmount = newData.reduce((acc: number, cur: ClientRow) => acc + Number(cur.amount), 0);
+      const newTotal = newData.reduce((sum: number, cur: ClientRow) => sum + cur.amount, 0);
 
       setClientData(newData);
-      setTotalAmount(newDataTotalAmount);
+      setTotalAmount(newTotal);
 
       // 월 목록에 없으면 추가
       if (!availableMonths.includes(month)) {
@@ -109,6 +110,7 @@ const ClientAmountSection = ({data, initTotalAmount, label, months}: ClientAmoun
             months={availableMonths}
             onPrintClick={handlePrint}
             onMonthChange={handleMonthChange}
+            selectedMonth={availableMonths.length > 0 ? selectedMonth : undefined}
           />
         </div>
       </div>

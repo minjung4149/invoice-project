@@ -1,26 +1,28 @@
 "use client";
-import React, {useState} from "react";
+import React from "react";
 
 interface AmountSummaryProps {
   total?: number;
   label?: string;
   months?: string[];
+  selectedMonth?: string;
   onPrintClick?: () => void;
   onMonthChange?: (month: string) => void;
   showSummaryContent?: boolean;
 }
 
-const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showSummaryContent}: AmountSummaryProps) => {
-  const [selectedMonth, setSelectedMonth] = useState(
-    months && months.length > 0 ? months[0] : ""
-  );
-
+const AmountSummary = ({
+                         total,
+                         label,
+                         months,
+                         selectedMonth,
+                         onPrintClick,
+                         onMonthChange,
+                         showSummaryContent,
+                       }: AmountSummaryProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setSelectedMonth(value);
-    if (onMonthChange) {
-      onMonthChange(value); // 선택된 월 부모로 전달
-    }
+    onMonthChange?.(value);
   };
 
   const formatMonthForSelect = (month?: string) => {
@@ -35,14 +37,14 @@ const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showS
   };
 
   const labelText =
-    months && selectedMonth
+    selectedMonth && label
       ? `${formatMonthForLabel(selectedMonth)} ${label} 합계`
       : `${label} 합계`;
 
   return (
     <div className="amount-summary">
       <div className="summary-header">
-        {Array.isArray(months) && months.filter(m => typeof m === "string" && m.includes("-")).length > 0 && (
+        {Array.isArray(months) && months.length > 0 && selectedMonth && (
           <select
             className="month-selector"
             value={selectedMonth}
@@ -50,6 +52,7 @@ const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showS
           >
             {[...new Set(months)]
               .filter((m): m is string => typeof m === "string" && m.includes("-"))
+              .sort((a, b) => b.localeCompare(a))
               .map((month) => (
                 <option key={month} value={month}>
                   {formatMonthForSelect(month)}
@@ -64,7 +67,7 @@ const AmountSummary = ({total, label, months, onPrintClick, onMonthChange, showS
         )}
       </div>
 
-      {showSummaryContent !== false && ( // 기본값은 true
+      {showSummaryContent !== false && (
         <div className="summary-content">
           <p className="summary-label">{labelText}</p>
           <p className="summary-amount">{total?.toLocaleString()} 원</p>

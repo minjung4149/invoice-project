@@ -1,21 +1,20 @@
 import React from "react";
 
-interface ProductRow {
+interface ProductSalesRow {
   itemId: number;
   name: string;
-  spec: string;
+  spec?: string;
   quantity: number;
   amount: number;
 }
 
-interface TableProps {
-  data: ProductRow[];
+interface ProductAmountProps {
+  data: ProductSalesRow[];
   amountLabel: string;
 }
 
-const ProductAmountTable = ({data, amountLabel}: TableProps) => {
-  const filteredSorted = data
-    .sort((a, b) => b.amount - a.amount);
+const ProductAmountTable = ({data, amountLabel}: ProductAmountProps) => {
+  const filteredSorted = data.sort((a, b) => b.quantity - a.quantity);
 
   return (
     <div className="table-container">
@@ -31,10 +30,10 @@ const ProductAmountTable = ({data, amountLabel}: TableProps) => {
         </thead>
         <tbody>
         {filteredSorted.map(({itemId, name, spec, quantity, amount}, index) => (
-          <tr key={itemId}>
+          <tr key={itemId ?? index}>
             <td className="itemId">{index + 1}</td>
             <td className="name">{name}</td>
-            <td className="spec">{spec}</td>
+            <td className="spec">{spec ?? "-"}</td>
             <td className="quantity">{quantity.toLocaleString()}</td>
             <td className="amount">{amount.toLocaleString()} 원</td>
           </tr>
