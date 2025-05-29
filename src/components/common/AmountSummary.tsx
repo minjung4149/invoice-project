@@ -76,21 +76,21 @@ const AmountSummary = ({
       {/* 요약 내용 표시 */}
       {showSummaryContent !== false && (
         <div className="summary-content">
-          <p className="summary-label">{labelText}</p>
+          <h3 className="summary-label">{labelText}</h3>
           <p className="summary-amount">{total?.toLocaleString()} 원</p>
         </div>
       )}
 
-      {/* 정렬 버튼들 */}
+      {/* 정렬 버튼 */}
       {sortKey && onSortChange && (
         <div className="sort-label">
-          <h3>정렬</h3>
+          <h3 className="summary-label">정렬</h3>
           <div className="sort-buttons">
             <button
               className={`sort-button${sortKey === "name" ? " active" : ""}`}
               onClick={() => onSortChange("name")}
             >
-              판매품목순
+              품목이름순
             </button>
             <button
               className={`sort-button${sortKey === "quantity" ? " active" : ""}`}

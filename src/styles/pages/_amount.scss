@@ -69,13 +69,6 @@
     flex-direction: column;
     gap: 14px;
 
-    .summary-label {
-      font-size: 18px;
-      font-weight: 600;
-      color: #111;
-      margin-bottom: 6px;
-    }
-
     .summary-amount {
       font-size: 28px;
       font-weight: 700;
@@ -84,4 +77,18 @@
       border-bottom: 2px solid #ddd;
     }
   }
+
+  .summary-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 6px;
+  }
+
+  .sort-buttons {
+    display: flex;
+    gap: 20px;
+  }
 }
+
+
