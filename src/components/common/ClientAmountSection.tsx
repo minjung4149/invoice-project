@@ -4,6 +4,7 @@ import ClientAmountTable from "@/components/common/ClientAmountTable";
 import AmountSummary from "@/components/common/AmountSummary";
 import {getClientSales} from "@/utils/api";
 
+// API로부터 받아오는 원본 데이터 형태
 interface ClientSales {
   clientId: number;
   name: string;
@@ -12,6 +13,7 @@ interface ClientSales {
   totalSales: number | string;
 }
 
+// 내부에서 사용하는 변환된 데이터 타입
 interface ClientRow {
   clientId: number;
   name: string;
@@ -20,12 +22,13 @@ interface ClientRow {
   amount: number;
 }
 
+// 부모 컴포넌트로부터 전달받는 props 타입 정의
 interface ClientAmountProps {
-  data: ClientRow[];
-  initTotalAmount: number;
-  label: string;
-  months: string[];
-  initialMonth?: string;
+  data: ClientRow[];              // 초기 데이터 (SSR로 전달됨)
+  initTotalAmount: number;        // 초기 총액
+  label: string;                  // 지표명 (예: "매출")
+  months: string[];               // 선택 가능한 월 목록
+  initialMonth?: string;          // 초기 선택 월
 }
 
 const ClientAmountSection = ({
@@ -35,12 +38,13 @@ const ClientAmountSection = ({
                                months,
                                initialMonth,
                              }: ClientAmountProps) => {
-  const printRef = useRef<HTMLDivElement>(null);
+  const printRef = useRef<HTMLDivElement>(null); // 프린트 대상 영역 참조
   const [selectedMonth, setSelectedMonth] = useState(initialMonth ?? "");
   const [clientData, setClientData] = useState<ClientRow[]>(data);
   const [totalAmount, setTotalAmount] = useState(initTotalAmount);
   const [availableMonths, setAvailableMonths] = useState<string[]>(months);
 
+  // 선택된 월이 목록에 없으면 추가 (월 변경으로 인해 새로 조회된 경우)
   useEffect(() => {
     if (!availableMonths.includes(selectedMonth)) {
       setAvailableMonths((prev) => [...prev, selectedMonth]);
@@ -48,6 +52,7 @@ const ClientAmountSection = ({
   }, [selectedMonth, availableMonths]);
 
 
+  // 월 변경 시 새로운 데이터 fetch + 상태 갱신
   const handleMonthChange = async (month: string) => {
     setSelectedMonth(month);
 
@@ -66,7 +71,7 @@ const ClientAmountSection = ({
       setClientData(newData);
       setTotalAmount(newTotal);
 
-      // 월 목록에 없으면 추가
+      // 월 목록 업데이트 (중복 방지)
       if (!availableMonths.includes(month)) {
         setAvailableMonths((prev) => [...prev, month]);
       }
@@ -75,15 +80,17 @@ const ClientAmountSection = ({
     }
   };
 
+  // "2025-04" → "4월" 형태로 변환
   const formatMonthOnly = (month?: string) => {
     if (!month) return "";
     const [, m] = month.split("-");
     return `${parseInt(m, 10)}월`;
   };
 
+  // 선택된 월을 포함한 동적 라벨 생성
   const dynamicLabel = selectedMonth ? `${formatMonthOnly(selectedMonth)} ${label}` : label;
 
-
+  // 프린트 기능 처리
   const handlePrint = () => {
     if (!printRef.current) return;
 
@@ -100,10 +107,12 @@ const ClientAmountSection = ({
     <>
       <div className="main-wrapper">
         <div className="amount-wrapper">
+          {/* 프린트 대상 영역 */}
           <div ref={printRef} className="amount-list">
             <ClientAmountTable data={clientData} amountLabel={dynamicLabel}/>
           </div>
 
+          {/* 요약 및 컨트롤 */}
           <AmountSummary
             total={totalAmount}
             label={label}
