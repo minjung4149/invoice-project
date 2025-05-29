@@ -31,13 +31,15 @@ const SalesMonthlyPage = async () => {
     console.error("초기 판매 데이터 불러오기 실패:", error);
   }
 
-  // 테이블에 전달할 형태로 변환
+// 테이블에 전달할 형태로 변환
   const tableData = salesData.map((item: ItemSales, index: number) => ({
+    itemId: index + 1,
     name: item.name,
     spec: item.spec,
     quantity: item.quantity,
     amount: item.amount,
   }));
+
 
   return (
     <>
@@ -45,7 +47,7 @@ const SalesMonthlyPage = async () => {
       <main className="site-content">
         <div className="container">
           <ProductAmountSection
-            data={salesData}
+            data={tableData}
             months={months}
             initialMonth={currentMonth}
             label="판매"/>

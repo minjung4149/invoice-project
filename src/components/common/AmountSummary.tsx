@@ -83,25 +83,28 @@ const AmountSummary = ({
 
       {/* 정렬 버튼들 */}
       {sortKey && onSortChange && (
-        <div className="sort-buttons">
-          <button
-            className={`sort-button${sortKey === "name" ? " active" : ""}`}
-            onClick={() => onSortChange("name")}
-          >
-            품목순
-          </button>
-          <button
-            className={`sort-button${sortKey === "quantity" ? " active" : ""}`}
-            onClick={() => onSortChange("quantity")}
-          >
-            수량순
-          </button>
-          <button
-            className={`sort-button${sortKey === "amount" ? " active" : ""}`}
-            onClick={() => onSortChange("amount")}
-          >
-            판매순
-          </button>
+        <div className="sort-label">
+          <h3>정렬</h3>
+          <div className="sort-buttons">
+            <button
+              className={`sort-button${sortKey === "name" ? " active" : ""}`}
+              onClick={() => onSortChange("name")}
+            >
+              판매품목순
+            </button>
+            <button
+              className={`sort-button${sortKey === "quantity" ? " active" : ""}`}
+              onClick={() => onSortChange("quantity")}
+            >
+              판매수량순
+            </button>
+            <button
+              className={`sort-button${sortKey === "amount" ? " active" : ""}`}
+              onClick={() => onSortChange("amount")}
+            >
+              판매금액순
+            </button>
+          </div>
         </div>
       )}
     </div>
