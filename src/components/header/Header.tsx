@@ -1,3 +1,11 @@
+/**
+ * Header 컴포넌트
+ *
+ * - 메인 페이지 상단에 고정되는 헤더 UI
+ * - 거래처 등록 모달 오픈 및 처리 기능 포함
+ * - "신규 거래처 등록" 및 "거래처 잔금 확인" 버튼 제공
+ */
+
 "use client";
 import {useState, useCallback} from "react";
 import Link from "next/link";
@@ -15,13 +23,7 @@ interface Client {
   isFavorite: boolean;
 }
 
-/**
- * Header 컴포넌트
- *
- * - 메인 페이지 상단에 고정되는 헤더 UI
- * - 거래처 등록 모달 오픈 및 처리 기능 포함
- * - "신규 거래처 등록" 및 "거래처 잔금 확인" 버튼 제공
- */
+
 const Header = ({onClientRegistered}: { onClientRegistered: () => void }) => {
   // 거래처 등록 모달의 열림/닫힘 상태
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);

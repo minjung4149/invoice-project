@@ -1,3 +1,13 @@
+/**
+ * ProductAmountSection 컴포넌트
+ *
+ * 상품별 월별 판매 데이터를 요약하고 표로 출력하는 클라이언트 컴포넌트
+ * - 초기 SSR 데이터 기반으로 렌더링하고, 월 변경 시 실시간 fetch 및 정렬 적용
+ * - 사용자는 품목명 / 수량 / 판매금액 기준으로 정렬할 수 있음
+ * - 프린트 기능을 제공하며, 인쇄 시 프린트 영역만 추출하여 출력 가능
+ * - 내부적으로 ProductAmountTable, AmountSummary 컴포넌트를 사용
+ */
+
 "use client";
 import React, {useRef, useState, useEffect} from "react";
 import ProductAmountTable from "@/components/common/ProductAmountTable";
@@ -20,6 +30,7 @@ interface ProductAmountProps {
   label: string;
   initialMonth: string;
 }
+
 
 const ProductAmountSection = ({data, months, label, initialMonth}: ProductAmountProps) => {
   const printRef = useRef<HTMLDivElement>(null);

@@ -1,3 +1,12 @@
+/**
+ * HistoryTable 컴포넌트
+ *
+ * - 특정 거래처의 주문 내역 리스트를 테이블 형태로 출력
+ * - 최신 주문 자동 선택
+ * - 무한 스크롤로 점진적 데이터 로딩
+ * - 주문 수정 버튼은 최신 주문에만 노출
+ */
+
 "use client";
 import React, {useState, useEffect, useRef, useReducer} from "react";
 import {useRouter} from "next/navigation";
@@ -61,14 +70,7 @@ interface HistoryTableProps {
   onDownloadImage: () => void;
 }
 
-/**
- * HistoryTable 컴포넌트
- *
- * - 특정 거래처의 주문 내역 리스트를 테이블 형태로 출력
- * - 최신 주문 자동 선택
- * - 무한 스크롤로 점진적 데이터 로딩
- * - 주문 수정 버튼은 최신 주문에만 노출
- */
+
 const HistoryTable = ({clientId, clientName, onSelectOrder, onDownloadImage}: HistoryTableProps) => {
   const router = useRouter();
   const itemsPerPage = 10;

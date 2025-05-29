@@ -1,10 +1,3 @@
-"use client";
-import React from 'react';
-import Link from "next/link";
-import {usePathname} from "next/navigation";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCoins, faHouse, faWallet, faWonSign} from "@fortawesome/free-solid-svg-icons";
-
 /**
  * HeaderHome 컴포넌트
  *
@@ -12,14 +5,23 @@ import {faCoins, faHouse, faWallet, faWonSign} from "@fortawesome/free-solid-svg
  * - 경로별 타이틀 매핑 객체 기반으로 유연하게 처리 가능
  * - 매칭되지 않으면 기본값: "현황 페이지"
  */
+
+"use client";
+import React from 'react';
+import Link from "next/link";
+import {usePathname} from "next/navigation";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCoins, faHouse, faWallet, faWonSign} from "@fortawesome/free-solid-svg-icons";
+
+
 const HeaderHome = () => {
   const pathname = usePathname();
 
   // 경로별 타이틀 매핑
   const titleMap: { [key: string]: string } = {
-    "/balance": "거래처 잔금 현황",
+    "/balance": "거래처 잔금 현황 🐝",
     "/sales-monthly": "한달 기준 판매 현황",
-    "/client-monthly": "한달 기준 매출 현황",
+    "/client-monthly": "한달 기준 매출 현황 🌷",
   };
 
   // 가장 먼저 일치하는 경로 키 찾기

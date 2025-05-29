@@ -1,3 +1,11 @@
+/**
+ * ClientRegisterModal 컴포넌트
+ *
+ * 거래처를 새로 등록하거나 기존 거래처 정보를 수정하는 폼 모달
+ * - name은 필수 입력 필드
+ * - 초기값 존재 시 '수정', 없으면 '등록' 모드로 동작
+ */
+
 "use client";
 import {useState, useEffect} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -20,13 +28,7 @@ interface ClientRegisterModalProps {
   initialData?: Client | null; // 수정 시 기존 거래처 정보
 }
 
-/**
- * ClientRegisterModal 컴포넌트
- *
- * 거래처를 새로 등록하거나 기존 거래처 정보를 수정하는 폼 모달
- * - name은 필수 입력 필드
- * - 초기값 존재 시 '수정', 없으면 '등록' 모드로 동작
- */
+
 const ClientRegisterModal = ({
                                isOpen,
                                onCloseAction,

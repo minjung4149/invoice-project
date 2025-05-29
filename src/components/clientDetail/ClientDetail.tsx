@@ -1,11 +1,3 @@
-"use client";
-import {useState, useEffect, useCallback, useRef} from "react";
-import {useSearchParams} from "next/navigation";
-import ClientInputForm from "@/components/clientDetail/ClientInputForm";
-import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
-import {getLatestInvoiceByClientId} from "@/utils/api";
-import {InvoiceData} from "@/types/common";
-
 /**
  * ClientDetail 컴포넌트
  *
@@ -14,6 +6,16 @@ import {InvoiceData} from "@/types/common";
  * - 사용자는 품목, 날짜, 금액, 비고 등을 입력할 수 있으며 실시간으로 미리보기를 확인 가능
  * - 내부적으로 ClientInputForm과 InvoiceTemplate을 렌더링
  */
+
+"use client";
+import {useState, useEffect, useCallback, useRef} from "react";
+import {useSearchParams} from "next/navigation";
+import ClientInputForm from "@/components/clientDetail/ClientInputForm";
+import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
+import {getLatestInvoiceByClientId} from "@/utils/api";
+import {InvoiceData} from "@/types/common";
+
+
 const ClientDetail = () => {
   const currentYear = new Date().getFullYear().toString();
   const searchParams = useSearchParams();

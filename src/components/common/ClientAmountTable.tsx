@@ -1,3 +1,13 @@
+/**
+ * ClientAmountTable 컴포넌트
+ *
+ * 거래처별 금액(잔금 또는 매출) 현황을 표 형태로 출력하는 재사용 가능한 컴포넌트
+ * - props로 전달된 거래처 리스트를 금액 기준으로 내림차순 정렬하여 표시
+ * - 최근 거래 날짜, 거래처명, 연락처, 금액(amount)을 테이블 형태로 구성
+ * - 날짜는 formatDate, 연락처는 formatPhone 유틸 함수로 포맷 처리
+ * - 금액 열의 라벨과 강조 색상은 props로 동적으로 제어
+ */
+
 import React from 'react';
 import {formatDate} from "@/utils/date";
 import {formatPhone} from "@/utils/format";
@@ -16,15 +26,6 @@ interface AmountTableProps {
   amountLabel: string; // 마지막 열 라벨: '잔금' 또는 '매출'
 }
 
-/**
- * ClientAmountTable 컴포넌트
- *
- * 거래처별 금액(잔금 또는 매출) 현황을 표 형태로 출력하는 재사용 가능한 컴포넌트
- * - props로 전달된 거래처 리스트를 금액 기준으로 내림차순 정렬하여 표시
- * - 최근 거래 날짜, 거래처명, 연락처, 금액(amount)을 테이블 형태로 구성
- * - 날짜는 formatDate, 연락처는 formatPhone 유틸 함수로 포맷 처리
- * - 금액 열의 라벨과 강조 색상은 props로 동적으로 제어
- */
 
 const ClientAmountTable = ({data, amountLabel}: AmountTableProps) => {
   const sortedData = [...data].sort((a, b) => b.amount - a.amount);

@@ -1,3 +1,13 @@
+/**
+ * ClientAmountSection 컴포넌트
+ *
+ * 거래처별 월별 매출 데이터를 표와 요약 형식으로 보여주는 클라이언트 컴포넌트
+ * - 초기 데이터는 SSR로 전달되며, 월 변경 시 실시간으로 데이터를 fetch하여 갱신
+ * - 선택된 월에 따라 총 매출 합계 및 거래처별 매출 데이터를 보여줌
+ * - 프린트 기능, 월 변경, 선택 월 목록 관리 기능을 포함
+ * - 내부적으로 ClientAmountTable, AmountSummary 컴포넌트를 사용
+ */
+
 "use client";
 import React, {useRef, useState, useEffect} from "react";
 import ClientAmountTable from "@/components/common/ClientAmountTable";
@@ -30,6 +40,7 @@ interface ClientAmountProps {
   months: string[];               // 선택 가능한 월 목록
   initialMonth?: string;          // 초기 선택 월
 }
+
 
 const ClientAmountSection = ({
                                data,

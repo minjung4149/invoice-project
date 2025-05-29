@@ -1,3 +1,14 @@
+/**
+ * AmountSummary 컴포넌트
+ *
+ * 매출 또는 판매 데이터를 요약하여 보여주는 UI 컴포넌트
+ * - 총합 금액과 선택된 월 정보를 표시
+ * - 월 선택 드롭다운 및 인쇄 버튼 제공
+ * - 정렬 버튼을 통해 품목 이름/수량/금액 기준 정렬 지원
+ * - `ClientAmountSection`, `ProductAmountSection` 등에서 공통으로 사용됨
+ */
+
+
 "use client";
 import React from "react";
 
@@ -13,6 +24,7 @@ interface AmountSummaryProps {
   onSortChange?: (field: "name" | "quantity" | "amount") => void; // 정렬 기준 변경 핸들러
   showSummaryContent?: boolean; // 요약 표시 여부 제어
 }
+
 
 const AmountSummary = ({
                          total,

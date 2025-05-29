@@ -1,3 +1,10 @@
+/**
+ * ClientList 컴포넌트
+ *
+ * - 전체 거래처 리스트를 출력하고
+ * - 수정/즐겨찾기 기능을 제공하는 클라이언트 전용 컴포넌트
+ */
+
 "use client";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
@@ -21,12 +28,7 @@ interface ClientListProps {
   onRefresh: () => Promise<void>; // 거래처 갱신 콜백
 }
 
-/**
- * ClientList 컴포넌트
- *
- * - 전체 거래처 리스트를 출력하고
- * - 수정/즐겨찾기 기능을 제공하는 클라이언트 전용 컴포넌트
- */
+
 const ClientList = ({clients, onRefresh}: ClientListProps) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);

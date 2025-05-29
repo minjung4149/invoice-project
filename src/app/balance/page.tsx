@@ -3,6 +3,7 @@ import HeaderHome from "@/components/header/HeaderHome";
 import {getClientBalance} from "@/utils/api";
 import ClientAmountSection from "@/components/common/ClientAmountSection";
 
+// API로부터 수신하는 잔금 데이터 타입 정의
 interface ClientBalance {
   clientId: number;
   name: string;
@@ -17,6 +18,7 @@ const BalancePage = async () => {
     return []; // fallback to empty array
   });
 
+  // 잔액이 0원 초과인 고객만 필터링 후, 화면에 표시할 구조로 가공
   const tableData = rawData
     .filter(client => client.balance > 0)
     .map(client => ({
@@ -27,6 +29,7 @@ const BalancePage = async () => {
       amount: client.balance,
     }));
 
+  // 초기 총 잔금 합계 계산
   const initTotalAmount = tableData.reduce((sum, client) => sum + client.amount, 0);
 
   return (
@@ -38,7 +41,7 @@ const BalancePage = async () => {
             data={tableData}
             initTotalAmount={initTotalAmount}
             label="잔금"
-            months={[]} // 달 선택 없이
+            months={[]}
           />
         </div>
       </main>

@@ -1,3 +1,10 @@
+/**
+ * HistoryTemplate 컴포넌트
+ *
+ * - 선택된 주문의 상세 인보이스 데이터를 불러와 출력
+ * - 품목 테이블 + 요약 정보(소계, 전잔금, 입금, 잔금, 비고) 제공
+ */
+
 "use client";
 import React, {forwardRef} from "react";
 import {useSearchParams} from "next/navigation";
@@ -36,12 +43,7 @@ interface HistoryTemplateProps {
   invoiceDetail: InvoiceDetail | null;
 }
 
-/**
- * HistoryTemplate 컴포넌트
- *
- * - 선택된 주문의 상세 인보이스 데이터를 불러와 출력
- * - 품목 테이블 + 요약 정보(소계, 전잔금, 입금, 잔금, 비고) 제공
- */
+
 const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
   function HistoryTemplate({selectedOrder, invoiceDetail}, ref) {
 

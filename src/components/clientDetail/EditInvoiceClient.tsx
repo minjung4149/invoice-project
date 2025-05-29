@@ -1,11 +1,3 @@
-"use client";
-import React, {useEffect, useState, useCallback, useRef} from "react";
-import {useSearchParams} from "next/navigation";
-import ClientInputForm from "@/components/clientDetail/ClientInputForm";
-import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
-import {getInvoiceById} from "@/utils/api";
-import {InvoiceData, InvoiceItem} from "@/types/common";
-
 /**
  * EditInvoiceClient 컴포넌트
  *
@@ -16,6 +8,16 @@ import {InvoiceData, InvoiceItem} from "@/types/common";
  * - 날짜/품목/입금액 등의 정보는 포맷 가공 후 상태로 관리됨
  * - 수정 완료 여부는 isUpdated 상태로 관리
  */
+
+"use client";
+import React, {useEffect, useState, useCallback, useRef} from "react";
+import {useSearchParams} from "next/navigation";
+import ClientInputForm from "@/components/clientDetail/ClientInputForm";
+import InvoiceTemplate from "@/components/clientDetail/InvoiceTemplate";
+import {getInvoiceById} from "@/utils/api";
+import {InvoiceData, InvoiceItem} from "@/types/common";
+
+
 const EditInvoiceClient = () => {
   const searchParams = useSearchParams();
 

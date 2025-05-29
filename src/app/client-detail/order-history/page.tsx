@@ -9,7 +9,7 @@ const OrderHistoryPage = () => {
   return (
     <>
       {/* 주문 내역 리스트를 보여주는 클라이언트 컴포넌트 */}
-      <Suspense fallback={<p></p>}>
+      <Suspense fallback={<p>로딩 중</p>}>
         <OrderHistoryClient/>
       </Suspense>
     </>

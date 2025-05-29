@@ -1,7 +1,3 @@
-"use client";
-import {useSearchParams} from "next/navigation";
-import HeaderDetail from "@/components/header/HeaderDetail";
-
 /**
  * HeaderDetailClient 컴포넌트
  *
@@ -11,6 +7,12 @@ import HeaderDetail from "@/components/header/HeaderDetail";
  * - URL 쿼리에서 거래처 이름(name)과 ID(id)를 추출
  * - HeaderDetail에 props로 넘겨주어 동적으로 헤더를 구성함
  */
+
+"use client";
+import {useSearchParams} from "next/navigation";
+import HeaderDetail from "@/components/header/HeaderDetail";
+
+
 const HeaderDetailClient = () => {
   const searchParams = useSearchParams();
 

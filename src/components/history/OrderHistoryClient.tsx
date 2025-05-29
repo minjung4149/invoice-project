@@ -1,3 +1,12 @@
+/**
+ * OrderHistoryClient 컴포넌트
+ *
+ * 거래처 주문 내역 페이지의 클라이언트 전용 컴포넌트
+ * - URL 쿼리에서 거래처 ID 및 이름을 추출
+ * - 주문 리스트(HistoryTable)와 상세 보기(HistoryTemplate)를 조합하여 보여줌
+ * - 주문 선택 시 상세 정보를 업데이트하여 하단에 출력
+ */
+
 "use client";
 import React, {useState, useRef, useEffect} from "react";
 import {useSearchParams} from "next/navigation";
@@ -27,14 +36,7 @@ interface InvoiceDetail {
   note?: string;
 }
 
-/**
- * OrderHistoryClient 컴포넌트
- *
- * 거래처 주문 내역 페이지의 클라이언트 전용 컴포넌트
- * - URL 쿼리에서 거래처 ID 및 이름을 추출
- * - 주문 리스트(HistoryTable)와 상세 보기(HistoryTemplate)를 조합하여 보여줌
- * - 주문 선택 시 상세 정보를 업데이트하여 하단에 출력
- */
+
 const OrderHistoryClient = () => {
   const searchParams = useSearchParams();
   const [invoiceDetail, setInvoiceDetail] = useState<InvoiceDetail | null>(null);

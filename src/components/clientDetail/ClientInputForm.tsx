@@ -1,3 +1,13 @@
+/**
+ * ClientInputForm 컴포넌트
+ *
+ * 사용자가 인보이스 항목을 직접 입력할 수 있는 입력 폼 UI를 제공하는 컴포넌트
+ * - 날짜, 품목 리스트, 입금액, 비고 등 다양한 항목을 입력 가능
+ * - 품목 항목은 동적으로 추가 및 삭제할 수 있으며, 과일 자동 입력 기능 제공
+ * - 입력값은 유효성 검사를 거쳐 상위 컴포넌트로 전달됨 (setInvoiceData, setIsUpdated 활용)
+ * - 입력값에 따라 금액 합계와 한글 변환 결과도 실시간으로 표시
+ */
+
 "use client";
 import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -63,15 +73,7 @@ const convertToKoreanCurrency = (num: number): string => {
   return result.replace(/\s+/g, "").trim() + " 원";
 };
 
-/**
- * ClientInputForm 컴포넌트
- *
- * 사용자가 인보이스 항목을 직접 입력할 수 있는 입력 폼 UI를 제공하는 컴포넌트
- * - 날짜, 품목 리스트, 입금액, 비고 등 다양한 항목을 입력 가능
- * - 품목 항목은 동적으로 추가 및 삭제할 수 있으며, 과일 자동 입력 기능 제공
- * - 입력값은 유효성 검사를 거쳐 상위 컴포넌트로 전달됨 (setInvoiceData, setIsUpdated 활용)
- * - 입력값에 따라 금액 합계와 한글 변환 결과도 실시간으로 표시
- */
+
 const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInputFormProps) => {
   const today = new Date();
   const currentYear = today.getFullYear().toString();
