@@ -48,6 +48,7 @@ export async function GET(request: Request) {
                  JOIN "Invoice" i ON d."invoiceId" = i."id"
                  JOIN "Client" c ON i."clientId" = c."id"
         WHERE TO_CHAR(i."createDate", 'YYYY-MM') = ${targetMonth}
+          AND d.name != '전잔금'
         GROUP BY c."id", c."name", c."phone"
         ORDER BY "latestDate" DESC;
     `;

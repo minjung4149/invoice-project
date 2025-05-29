@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
                  INNER JOIN "Invoice" AS i ON i.id = id."invoiceId"
         WHERE i."createDate" >= ${fromDate}
           AND i."createDate" < ${toDate}
+          AND id.name != '전잔금'
         GROUP BY id.name, id.spec
     `;
 
