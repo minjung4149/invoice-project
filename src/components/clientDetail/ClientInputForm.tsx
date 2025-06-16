@@ -9,11 +9,14 @@
  */
 
 "use client";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAppleWhole, faPlus, faArrowUpRightFromSquare} from "@fortawesome/free-solid-svg-icons";
 import {InvoiceItem, InvoiceData} from "@/types/common";
 import fruitCategories from "@/data/fruitCategories";
+
+// 포커스 가능한 필드만 정의 (total 제외)
+type FocusableField = "name" | "spec" | "quantity" | "price";
 
 // ClientInputForm 컴포넌트에 전달되는 props 타입
 interface ClientInputFormProps {
@@ -108,6 +111,9 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
     note: "",
   });
 
+  // input 요소들 ref 설정
+  const itemRefs = useRef<Array<Partial<Record<FocusableField, HTMLInputElement | null>>>>([]);
+
   // 외부 상태(invoiceData) 반영
   useEffect(() => {
     setFormData({
@@ -141,6 +147,35 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
   // `input` 포커스 핸들러 (현재 포커스된 `input`의 index를 설정)
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
+  };
+
+  // `input`에서 Enter 키 입력 시 다음 필드로 포커스 이동
+  const handleEnterKey = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    rowIndex: number,
+    field: FocusableField
+  ) => {
+    if (e.key !== "Enter") return;
+
+    e.preventDefault();
+
+    const fields: FocusableField[] = ["name", "spec", "quantity", "price"];
+    const currentIdx = fields.indexOf(field);
+
+    if (currentIdx < fields.length - 1) {
+      const nextField = fields[currentIdx + 1];
+      setTimeout(() => {
+        itemRefs.current[rowIndex]?.[nextField]?.focus();
+      }, 0);
+    } else {
+      // 마지막 필드(price)일 경우 → 다음 행의 name으로 포커스
+      setTimeout(() => {
+        const nextRow = rowIndex + 1;
+        if (itemRefs.current[nextRow]?.name) {
+          itemRefs.current[nextRow].name?.focus();
+        }
+      }, 0);
+    }
   };
 
   // 과일 옵션 클릭 핸들러 (선택된 과일을 현재 포커스된 항목의 `name` 필드에 입력)
@@ -325,6 +360,11 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
               placeholder="품명"
               value={item.name}
               className={errors.items[index] && !item.name ? "error-border" : ""}
+              ref={(el) => {
+                if (!itemRefs.current[index]) itemRefs.current[index] = {};
+                itemRefs.current[index].name = el;
+              }}
+              onKeyDown={(e) => handleEnterKey(e, index, "name")}
               onFocus={() => handleFocus(index)} // 포커스 감지
               onChange={(e) => handleItemChange(index, "name", e.target.value)}
             />
@@ -332,6 +372,11 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
               type="text"
               placeholder="규격"
               value={item.spec}
+              ref={(el) => {
+                if (!itemRefs.current[index]) itemRefs.current[index] = {};
+                itemRefs.current[index].spec = el;
+              }}
+              onKeyDown={(e) => handleEnterKey(e, index, "spec")}
               onChange={(e) => handleItemChange(index, "spec", e.target.value)}
             />
             <input
@@ -339,6 +384,11 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
               className={`quantity ${errors.items[index] && !item.quantity ? "error-border" : ""}`}
               placeholder="수량"
               value={item.quantity}
+              ref={(el) => {
+                if (!itemRefs.current[index]) itemRefs.current[index] = {};
+                itemRefs.current[index].quantity = el;
+              }}
+              onKeyDown={(e) => handleEnterKey(e, index, "quantity")}
               onChange={(e) => handleItemChange(index, "quantity", e.target.value)}
             />
             <input
@@ -346,6 +396,11 @@ const ClientInputForm = ({invoiceData, setInvoiceData, setIsUpdated}: ClientInpu
               className={`price ${errors.items[index] && !item.price ? "error-border" : ""}`}
               placeholder="단가"
               value={item.price}
+              ref={(el) => {
+                if (!itemRefs.current[index]) itemRefs.current[index] = {};
+                itemRefs.current[index].price = el;
+              }}
+              onKeyDown={(e) => handleEnterKey(e, index, "price")}
               onChange={(e) => handleItemChange(index, "price", e.target.value)}
             />
             <button className="remove-btn" onClick={() => handleRemoveItem(index)}>✕</button>
