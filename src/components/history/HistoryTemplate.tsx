@@ -82,11 +82,11 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
           {/* 우측: 판매자 정보 */}
           <div className="header-right">
             <p className="spacing"><strong>중앙영농 (주)</strong></p>
-            <p className="spacing">서영민</p>
+            <p className="spacing">대표 서영민</p>
             <p>대구광역시 북구 매천로18길 34</p>
-            <p><strong>전화:</strong> (053) 311-4149</p>
-            <p><strong>휴대폰:</strong> 010-7710-1883</p>
-            <p><strong>휴대폰:</strong> 010-8596-4149</p>
+            <p>전화: (053) 311-4149</p>
+            <p>휴대폰: 010-7710-1883</p>
+            <p>휴대폰: 010-8596-4149</p>
           </div>
         </div>
 
