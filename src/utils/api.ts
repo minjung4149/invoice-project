@@ -283,7 +283,7 @@ export const getMonthlySales = async (month: string) => {
 
     const result = await response.json();
 
-    return result; // [{ name, spec, total_quantity, total_revenue }, ...]
+    return result;
   } catch (error) {
     console.error('월별 인보이스 요약 조회 실패:', error);
     throw error;

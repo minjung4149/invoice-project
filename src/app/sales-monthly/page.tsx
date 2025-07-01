@@ -27,6 +27,7 @@ const SalesMonthlyPage = async () => {
   try {
     // API 호출로 월별 매출 데이터 조회
     salesData = await getMonthlySales(currentMonth);
+    console.log("초기 판매 데이터:", salesData);
   } catch (error) {
     console.error("초기 판매 데이터 불러오기 실패:", error);
   }
