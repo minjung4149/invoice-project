@@ -6,9 +6,9 @@
  */
 
 "use client";
-import React, {forwardRef} from "react";
-import {useSearchParams} from "next/navigation";
-import {formatDate} from "@/utils/date";
+import React, { forwardRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { formatDate } from "@/utils/date";
 
 interface OrderData {
   id: number;
@@ -43,14 +43,12 @@ interface HistoryTemplateProps {
   invoiceDetail: InvoiceDetail | null;
 }
 
-
 const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
-  function HistoryTemplate({selectedOrder, invoiceDetail}, ref) {
-
+  function HistoryTemplate({ selectedOrder, invoiceDetail }, ref) {
     const searchParams = useSearchParams(); // URL 파라미터 접근
     const clientName = searchParams.get("name") || ""; // 클라이언트 이름
 
-    console.log('invoiceDetail', invoiceDetail)
+    console.log("invoiceDetail", invoiceDetail);
 
     return (
       <div className="invoice" ref={ref}>
@@ -63,26 +61,34 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
         <div className="invoice-header">
           {/* 좌측: 업체 정보 */}
           <div className="header-left">
-            <p className="store"><strong>{clientName}</strong> <span>貴下</span></p>
+            <p className="store">
+              <strong>{clientName}</strong> <span>貴下</span>
+            </p>
             <div className="invoice-date">
-              {selectedOrder.createDate && (() => {
-                const [datePart] = formatDate(selectedOrder.createDate).split(" "); // "YYYY-MM-DD"
-                const [year, month, day] = datePart.split("-");
-                return (
-                  <>
-                    <p>西紀 {year}년 {month}월 {day}일</p>
-                    <p>下記와 如히 計算함</p>
-                  </>
-                );
-              })()}
+              {selectedOrder.createDate &&
+                (() => {
+                  const [datePart] = formatDate(selectedOrder.createDate).split(
+                    " "
+                  ); // "YYYY-MM-DD"
+                  const [year, month, day] = datePart.split("-");
+                  return (
+                    <>
+                      <p>
+                        西紀 {year}년 {month}월 {day}일
+                      </p>
+                      <p>下記와 如히 計算함</p>
+                    </>
+                  );
+                })()}
             </div>
           </div>
 
-
           {/* 우측: 판매자 정보 */}
           <div className="header-right">
-            <p className="spacing"><strong>중앙영농 (주)</strong></p>
-            <p className="spacing">대표 서영민</p>
+            <p className="spacing">
+              <strong>중앙영농 (주)</strong>
+            </p>
+            <p className="spacing">대표 서희원</p>
             <p>대구광역시 북구 매천로18길 34</p>
             <p>전화: (053) 311-4149</p>
             <p>휴대폰: 010-7710-1883</p>
@@ -90,67 +96,77 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
           </div>
         </div>
 
-        <hr className="divider"/>
+        <hr className="divider" />
 
         {/* 품목 테이블 */}
         <table className="invoice-table">
           <thead>
-          <tr>
-            <th className="no">No</th>
-            <th className="name">품명</th>
-            <th className="spec">규격</th>
-            <th className="quantity">수량</th>
-            <th className="price">단가</th>
-            <th className="total">금액</th>
-          </tr>
+            <tr>
+              <th className="no">No</th>
+              <th className="name">품명</th>
+              <th className="spec">규격</th>
+              <th className="quantity">수량</th>
+              <th className="price">단가</th>
+              <th className="total">금액</th>
+            </tr>
           </thead>
           {invoiceDetail && (
             <tbody>
-            {invoiceDetail.items.map((item, idx) => (
-              <tr key={item.id}>
-                <td className="no">{idx + 1}</td>
-                <td className="name">{item.name}</td>
-                <td className="spec">{item.spec}</td>
-                <td className="quantity">{item.quantity}</td>
-                <td className="price">{item.price.toLocaleString()} 원</td>
-                <td className="total">{item.total.toLocaleString()} 원</td>
-              </tr>
-            ))}
+              {invoiceDetail.items.map((item, idx) => (
+                <tr key={item.id}>
+                  <td className="no">{idx + 1}</td>
+                  <td className="name">{item.name}</td>
+                  <td className="spec">{item.spec}</td>
+                  <td className="quantity">{item.quantity}</td>
+                  <td className="price">{item.price.toLocaleString()} 원</td>
+                  <td className="total">{item.total.toLocaleString()} 원</td>
+                </tr>
+              ))}
             </tbody>
           )}
         </table>
 
         {/* 구분선 */}
-        <hr className="divider"/>
+        <hr className="divider" />
 
         {/* 거래 요약 */}
         {invoiceDetail && (
           <div className="invoice-summary">
             <p>
               <span>소계:</span>
-              <span className="summary-value">{invoiceDetail.subtotal.toLocaleString()} 원</span>
+              <span className="summary-value">
+                {invoiceDetail.subtotal.toLocaleString()} 원
+              </span>
             </p>
-            <hr className="divider"/>
+            <hr className="divider" />
             <p>
               <span>전잔금:</span>
-              <span className="summary-value">{invoiceDetail.prevBalance.toLocaleString()} 원</span>
+              <span className="summary-value">
+                {invoiceDetail.prevBalance.toLocaleString()} 원
+              </span>
             </p>
-            <hr className="divider"/>
+            <hr className="divider" />
             <p>
               <span>합계:</span>
-              <span className="summary-value">{invoiceDetail.total.toLocaleString()} 원</span>
+              <span className="summary-value">
+                {invoiceDetail.total.toLocaleString()} 원
+              </span>
             </p>
-            <hr className="divider"/>
+            <hr className="divider" />
             <p>
               <span>입금:</span>
-              <span className="summary-value">{invoiceDetail.payment.toLocaleString()} 원</span>
+              <span className="summary-value">
+                {invoiceDetail.payment.toLocaleString()} 원
+              </span>
             </p>
-            <hr className="divider"/>
+            <hr className="divider" />
             <p>
               <span>잔금:</span>
-              <span className="summary-value">{invoiceDetail.balance.toLocaleString()} 원</span>
+              <span className="summary-value">
+                {invoiceDetail.balance.toLocaleString()} 원
+              </span>
             </p>
-            <hr className="divider"/>
+            <hr className="divider" />
             <p>
               <span>비고:</span>
               <span className="summary-value">{invoiceDetail.note || ""}</span>
@@ -159,7 +175,7 @@ const HistoryTemplate = forwardRef<HTMLDivElement, HistoryTemplateProps>(
         )}
 
         {/* 구분선 */}
-        <hr className="divider"/>
+        <hr className="divider" />
 
         {/* 푸터 */}
         <div className="invoice-footer">
