@@ -12,7 +12,8 @@
   position: relative;
 
   //폼 공통
-  input, textarea {
+  input,
+  textarea {
     @include input-style;
 
     &.error-border {
@@ -47,7 +48,7 @@
 
       &.inactive {
         @include line-primary;
-        color: #13141B;
+        color: #13141b;
       }
 
       &.active {
@@ -143,8 +144,9 @@
   .fruit-options {
     position: fixed;
     bottom: 3px;
-    right: 20px;
-    width: 45%;
+    //right: 20px;
+    right: 7px;
+    width: 46.5%;
     height: calc(100vh - 26px);
     background-color: #fff;
     padding: 10px;
@@ -155,6 +157,7 @@
     flex-wrap: wrap;
     gap: 10px;
     z-index: 100;
+    overflow-y: auto;
 
     /* 닫기 버튼 */
     .close-btn {
@@ -212,7 +215,8 @@
   }
 
   //입금액 & 비고 입력
-  .payment-group, .note-group {
+  .payment-group,
+  .note-group {
     display: grid;
     align-items: center;
     gap: 10px;
@@ -258,7 +262,7 @@
 
     &.inactive {
       @include line-primary;
-      color: #13141B;
+      color: #13141b;
     }
 
     &.active {
