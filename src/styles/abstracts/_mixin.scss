@@ -128,10 +128,6 @@ $breakpoints: (
   }
 }
 
-//@include respond-to(large) {
-//  gap: 20px;
-//}
-
 // 컬러
 @mixin bg-primary {
   background-color: $bg-primary;
