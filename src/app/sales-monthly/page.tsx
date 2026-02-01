@@ -20,7 +20,7 @@ const getTodayMonth = (): string => {
 
 const SalesMonthlyPage = async () => {
   const currentMonth = getTodayMonth();
-  const months = getMonthsSince("2025-06"); // 누적 월 자동 생성
+  const months = getMonthsSince("2026-01"); // 누적 월 자동 생성
   let salesData = [];
 
   try {
