@@ -23,7 +23,7 @@ const getTodayMonth = (): string => {
 const ClientMonthlyPage = async () => {
   // 현재 월과 기준월("2025-06")부터의 누적 월 목록 계산
   const currentMonth = getTodayMonth();
-  const months = getMonthsSince("2025-06");
+  const months = getMonthsSince("2026-01");
 
   let clients: ClientSales[] = [];
 
