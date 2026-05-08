@@ -6,6 +6,7 @@ interface Client {
   phone: string;
   note?: string;
   isFavorite: boolean;
+  isHidden?: boolean;
 }
 
 // 고객 정보 신규 등록 API
@@ -121,9 +122,9 @@ export const updateFavorite = async (clientData: {
 };
 
 //  고객 전체 리스트 호출 api
-export const getClientList = async () => {
+export const getClientList = async (includeHidden = false) => {
   try {
-    const response = await fetch('/api/clients'); // API 엔드포인트 호출
+    const response = await fetch(`/api/clients?includeHidden=${includeHidden}`); // API 엔드포인트 호출
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -133,6 +134,36 @@ export const getClientList = async () => {
   } catch (error) {
     console.error('Error fetching clients:', error);
     return [];
+  }
+};
+
+// 고객 메인 노출 상태 업데이트 api
+export const updateClientVisibility = async (clientData: {
+  id: number;
+  isHidden: boolean;
+}) => {
+  if (clientData.id == null) {
+    alert('업데이트하려면 유효한 ID가 필요합니다.');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/clients/visibility', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(clientData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to update client visibility:', error);
+    throw error;
   }
 };
 
