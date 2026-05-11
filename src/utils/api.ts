@@ -6,6 +6,7 @@ interface Client {
   phone: string;
   note?: string;
   isFavorite: boolean;
+  isHidden?: boolean;
 }
 
 // 고객 정보 신규 등록 API
@@ -120,10 +121,56 @@ export const updateFavorite = async (clientData: {
   }
 };
 
-//  고객 전체 리스트 호출 api
-export const getClientList = async () => {
+
+// 거래처 및 관련 데이터 삭제 api (가장 최신 invoice.balance가 0일 때만 가능)
+export const deleteClientWithInvoices = async (clientId: number) => {
   try {
-    const response = await fetch('/api/clients'); // API 엔드포인트 호출
+    const response = await fetch(`/api/invoice/delete?clientId=${clientId}`, {
+      method: 'DELETE',
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error ?? '삭제에 실패했습니다.');
+    }
+    return data;
+  } catch (error) {
+    console.error('Failed to delete client:', error);
+    throw error;
+  }
+};
+
+// 숨김 처리된 거래처 ID 목록 조회 (DB)
+export const getHiddenClientIdsApi = async (): Promise<number[]> => {
+  try {
+    const response = await fetch("/api/clients/hidden-ids");
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+    const data = await response.json();
+    return Array.isArray(data.hiddenIds) ? data.hiddenIds : [];
+  } catch (error) {
+    console.error("Failed to fetch hidden client ids:", error);
+    return [];
+  }
+};
+
+// 숨김 처리된 거래처 ID 목록 저장 (DB)
+export const setHiddenClientIdsApi = async (ids: number[]): Promise<void> => {
+  try {
+    const response = await fetch("/api/clients/hidden-ids", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ hiddenIds: ids }),
+    });
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+  } catch (error) {
+    console.error("Failed to save hidden client ids:", error);
+    throw error;
+  }
+};
+
+//  고객 전체 리스트 호출 api
+export const getClientList = async (includeHidden = false) => {
+  try {
+    const response = await fetch(`/api/clients?includeHidden=${includeHidden}`); // API 엔드포인트 호출
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -133,6 +180,36 @@ export const getClientList = async () => {
   } catch (error) {
     console.error('Error fetching clients:', error);
     return [];
+  }
+};
+
+// 고객 메인 노출 상태 업데이트 api
+export const updateClientVisibility = async (clientData: {
+  id: number;
+  isHidden: boolean;
+}) => {
+  if (clientData.id == null) {
+    alert('업데이트하려면 유효한 ID가 필요합니다.');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/clients/visibility', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(clientData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to update client visibility:', error);
+    throw error;
   }
 };
 
