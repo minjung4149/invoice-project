@@ -45,3 +45,9 @@ next-env.d.ts
 
 .prisma/
 prisma/
+
+# Supabase
+supabase/.temp
+
+# DB backups
+backups
